@@ -35,7 +35,7 @@ const Home: NextPage = () => {
           <ButtonLink to='/event/new' size='sm' sx={{ mr: 3, mt: 3 }}>
             New Event
           </ButtonLink>
-          <ButtonLink to='/event/status' outline size='sm' sx={{ mt: 3 }}>
+          <ButtonLink to='/event/status' outline size='sm' sx={{ mt: 3 }}> #TODO update the link
             Back Home
           </ButtonLink>
         </Box>

@@ -8,7 +8,7 @@ import {
   Progress,
 } from '@chakra-ui/react';
 
-import CreateEventForm from 'components/createEventForm';
+import CreateMentorForm from 'components/createMentorForm';
 
 import type { NextPage } from 'next';
 
@@ -33,7 +33,7 @@ const NewEvent: NextPage = () => {
             color='blackAlpha.600'
             fontSize={{ base: 'sm', lg: 'md' }}
           >
-            Please fill in the following application.
+            Please fill out the form below:
           </Text>
         </Container>
         <Progress
@@ -45,7 +45,7 @@ const NewEvent: NextPage = () => {
         />
       </Box>
       <Container maxW={{ base: '100%', lg: '2xl' }} py={{ base: 12, lg: 20 }}>
-        <CreateEventForm
+        <CreateMentorForm
           onProgressChange={setProgress}
           onSubmit={console.log}
         />

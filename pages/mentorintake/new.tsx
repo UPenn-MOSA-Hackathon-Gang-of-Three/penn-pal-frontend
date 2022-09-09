@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import {
   SlideFade,
   Container,
@@ -9,24 +8,12 @@ import {
   Progress,
 } from '@chakra-ui/react';
 
-import CreateEventForm from 'components/createEventForm';
+import CreateMentorForm from 'components/createMentorForm';
 
 import type { NextPage } from 'next';
-import { FormikValues } from 'formik';
 
 const NewEvent: NextPage = () => {
-  const router = useRouter();
-
   const [progress, setProgress] = useState<number>(0);
-
-  const handleSubmit = (values: FormikValues) => {
-    router.push({
-      pathname: '/event/success',
-      query: {
-        eventName: values.eventName,
-      },
-    });
-  };
 
   return (
     <SlideFade in offsetY='100vh'>
@@ -46,7 +33,7 @@ const NewEvent: NextPage = () => {
             color='blackAlpha.600'
             fontSize={{ base: 'sm', lg: 'md' }}
           >
-            Please fill in the following application.
+            Please fill out the form below:
           </Text>
         </Container>
         <Progress
@@ -58,9 +45,9 @@ const NewEvent: NextPage = () => {
         />
       </Box>
       <Container maxW={{ base: '100%', lg: '2xl' }} py={{ base: 12, lg: 20 }}>
-        <CreateEventForm
+        <CreateMentorForm
           onProgressChange={setProgress}
-          onSubmit={handleSubmit}
+          onSubmit={console.log}
         />
       </Container>
     </SlideFade>

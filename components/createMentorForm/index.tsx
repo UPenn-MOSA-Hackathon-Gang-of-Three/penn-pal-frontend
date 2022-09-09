@@ -79,6 +79,11 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
         return (
           <Form onSubmit={handleSubmit} noValidate>
             <VStack spacing={{ base: 16, lg: 20 }}>
+
+              <FormLabel htmlFor='personalSection' fontSize='lg' mb={5}>
+                Personal Information
+              </FormLabel>
+
               <FormControl
                 isRequired
                 isInvalid={!!errors.eventName && touched.eventName}
@@ -114,6 +119,12 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
+
+              {/*TODO add gender*/}
+
+              <FormLabel htmlFor='contactSection' fontSize='lg' mb={5}>
+                Contact Information
+              </FormLabel>
 
               <FormControl
                 isRequired
@@ -155,14 +166,23 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
+                <FormControl
+                    isInvalid={!!errors.eventName && touched.eventName}
+                >
 
-              {/*TODO add gender*/}
 
+                <FormLabel htmlFor='experienceSection' fontSize='lg' mb={5}>
+                  Experience
+                </FormLabel>
+
+                  <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                </FormControl>
 
               <FormControl
                   isRequired
                   isInvalid={!!errors.eventName && touched.eventName}
               >
+
                 <FormLabel htmlFor='companyName' fontSize='sm' mb={5}>
                   Company Name
                 </FormLabel>
@@ -233,6 +253,10 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
               {/*TODO add certification toggles*/}
 
               {/*TODO add dropdown menu for years of experience*/}
+
+                <FormLabel htmlFor='preferenceSection' fontSize='lg' mb={5}>
+                  Mentee Preferences
+                </FormLabel>
 
               {/*TODO add toggle for "Open to Multiple Mentor/mentees*/}
 

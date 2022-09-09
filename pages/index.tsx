@@ -1,14 +1,16 @@
 import { Container, Flex, Box, Heading, Text } from '@chakra-ui/react';
 import Lottie from 'lottie-react';
-import collaborateAnimation from 'assets/collaborateAnimation.json';
 
-import Button from 'components/button';
+import ButtonLink from 'components/buttonLink';
+
+import collaborateAnimation from 'assets/collaborateAnimation.json';
 
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
   return (
     <Container
+      py={{ base: 7, lg: 20 }}
       maxW={{ base: '100%', lg: '85%' }}
       display='flex'
       alignItems='center'
@@ -30,12 +32,12 @@ const Home: NextPage = () => {
           <Text mb={7}>
             Help professionals and students connect with others around the world
           </Text>
-          <Button size='sm' sx={{ mr: 3, mt: 3 }}>
+          <ButtonLink to='/event/new' size='sm' sx={{ mr: 3, mt: 3 }}>
             Create an event
-          </Button>
-          <Button size='sm' outline sx={{ mt: 3 }}>
+          </ButtonLink>
+          <ButtonLink to='/event/status' outline size='sm' sx={{ mt: 3 }}>
             View status
-          </Button>
+          </ButtonLink>
         </Box>
         <Box w={{ base: '100%', lg: 'calc(60% - 1rem)' }}>
           <Lottie animationData={collaborateAnimation} loop />

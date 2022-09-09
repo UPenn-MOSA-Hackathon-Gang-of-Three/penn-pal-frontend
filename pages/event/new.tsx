@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   SlideFade,
   Container,
@@ -11,9 +12,21 @@ import {
 import CreateEventForm from 'components/createEventForm';
 
 import type { NextPage } from 'next';
+import { FormikValues } from 'formik';
 
 const NewEvent: NextPage = () => {
+  const router = useRouter();
+
   const [progress, setProgress] = useState<number>(0);
+
+  const handleSubmit = (values: FormikValues) => {
+    router.push({
+      pathname: '/event/success',
+      query: {
+        eventName: values.eventName,
+      },
+    });
+  };
 
   return (
     <SlideFade in offsetY='100vh'>
@@ -47,7 +60,7 @@ const NewEvent: NextPage = () => {
       <Container maxW={{ base: '100%', lg: '2xl' }} py={{ base: 12, lg: 20 }}>
         <CreateEventForm
           onProgressChange={setProgress}
-          onSubmit={console.log}
+          onSubmit={handleSubmit}
         />
       </Container>
     </SlideFade>

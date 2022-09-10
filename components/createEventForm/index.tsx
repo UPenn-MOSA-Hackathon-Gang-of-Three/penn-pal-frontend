@@ -9,10 +9,11 @@ import {
   FormErrorMessage,
   Input,
   Textarea,
-  Button,
 } from '@chakra-ui/react';
 
-import { FormikValues, FormikErrors } from 'formik';
+import Button from 'components/button';
+
+import type { FormikValues, FormikErrors } from 'formik';
 
 const CreateEventSchema = Yup.object().shape({
   eventName: Yup.string().required('Field is required'),
@@ -142,7 +143,7 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
-              <Button type='submit' colorScheme='pennBlue'>
+              <Button type='submit' size='md'>
                 Create event
               </Button>
             </VStack>

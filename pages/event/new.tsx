@@ -24,6 +24,7 @@ const NewEvent: NextPage = () => {
       pathname: '/event/success',
       query: {
         eventName: values.eventName,
+        uniqueId: 12345,
       },
     });
   };

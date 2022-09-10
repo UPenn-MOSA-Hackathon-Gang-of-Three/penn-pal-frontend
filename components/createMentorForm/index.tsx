@@ -9,6 +9,7 @@ import {
   FormErrorMessage,
   Input,
   Textarea,
+  Text,
   Button,
 } from '@chakra-ui/react';
 
@@ -79,10 +80,9 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
         return (
           <Form onSubmit={handleSubmit} noValidate>
             <VStack spacing={{ base: 16, lg: 20 }}>
-
-              <FormLabel htmlFor='personalSection' fontSize='lg' mb={5}>
+              <Text fontSize='lg' mb={5}>
                 Personal Information
-              </FormLabel>
+              </Text>
 
               <FormControl
                 isRequired
@@ -103,149 +103,131 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
               </FormControl>
 
               <FormControl
-                  isRequired
-                  isInvalid={!!errors.eventName && touched.eventName}
+                isRequired
+                isInvalid={!!errors.eventName && touched.eventName}
               >
                 <FormLabel htmlFor='lastName' fontSize='sm' mb={5}>
                   Last Name
                 </FormLabel>
                 <Field
-                    as={Input}
-                    id='lastName'
-                    name='lastName'
-                    type='text'
-                    placeholder='Enter last name'
-                    fontSize='sm'
+                  as={Input}
+                  id='lastName'
+                  name='lastName'
+                  type='text'
+                  placeholder='Enter last name'
+                  fontSize='sm'
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
               {/*TODO add gender*/}
 
-              <FormLabel htmlFor='contactSection' fontSize='lg' mb={5}>
+              <Text fontSize='lg' mb={5}>
                 Contact Information
-              </FormLabel>
+              </Text>
 
               <FormControl
                 isRequired
-                isInvalid={!!errors.closingDate && touched.closingDate}
-              >
-
-              <FormControl
-                  isRequired
-                  isInvalid={!!errors.eventName && touched.eventName}
+                isInvalid={!!errors.eventName && touched.eventName}
               >
                 <FormLabel htmlFor='email' fontSize='sm' mb={5}>
                   Email
                 </FormLabel>
                 <Field
-                    as={Input}
-                    id='email'
-                    name='email'
-                    type='text'
-                    placeholder='Enter email address'
-                    fontSize='sm'
+                  as={Input}
+                  id='email'
+                  name='email'
+                  type='text'
+                  placeholder='Enter email address'
+                  fontSize='sm'
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
-              <FormControl
-                  isInvalid={!!errors.eventName && touched.eventName}
-              >
+              <FormControl isInvalid={!!errors.eventName && touched.eventName}>
                 <FormLabel htmlFor='phoneNumber' fontSize='sm' mb={5}>
                   Phone number
                 </FormLabel>
                 <Field
-                    as={Input}
-                    id='phoneNumber'
-                    name='phoneNumber'
-                    type='phone' //TODO check this type
-                    placeholder='Enter phone number'
-                    fontSize='sm'
+                  as={Input}
+                  id='phoneNumber'
+                  name='phoneNumber'
+                  type='phone' //TODO check this type
+                  placeholder='Enter phone number'
+                  fontSize='sm'
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
-                <FormControl
-                    isInvalid={!!errors.eventName && touched.eventName}
-                >
-
-
-                <FormLabel htmlFor='experienceSection' fontSize='lg' mb={5}>
-                  Experience
-                </FormLabel>
-
-                  <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
-                </FormControl>
-
-              <FormControl
-                  isRequired
-                  isInvalid={!!errors.eventName && touched.eventName}
-              >
-
-                <FormLabel htmlFor='companyName' fontSize='sm' mb={5}>
-                  Company Name
-                </FormLabel>
-                <Field
-                    as={Input}
-                    id='companyName'
-                    name='companyName'
-                    type='text'
-                    placeholder='Enter company name'
-                    fontSize='sm'
-                />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl
-                  isRequired
-                  isInvalid={!!errors.eventName && touched.eventName}
-              >
-                <FormLabel htmlFor='jobTitle' fontSize='sm' mb={5}>
-                  Job Title
-                </FormLabel>
-                <Field
-                    as={Input}
-                    id='jobTitle'
-                    name='jobTitle'
-                    type='text'
-                    placeholder='Enter job title'
-                    fontSize='sm'
-                />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl
-                  isInvalid={!!errors.eventName && touched.eventName}
-              >
+              <FormControl isInvalid={!!errors.eventName && touched.eventName}>
                 <FormLabel htmlFor='location' fontSize='sm' mb={5}>
                   Location
                 </FormLabel>
                 <Field
-                    as={Input}
-                    id='location'
-                    name='location'
-                    type='text'
-                    placeholder='Enter location'
-                    fontSize='sm'
+                  as={Input}
+                  id='location'
+                  name='location'
+                  type='text'
+                  placeholder='Enter location'
+                  fontSize='sm'
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 
               <FormControl
-                  isRequired
-                  isInvalid={!!errors.eventName && touched.eventName}
+                isRequired
+                isInvalid={!!errors.eventName && touched.eventName}
               >
                 <FormLabel htmlFor='timeZone' fontSize='sm' mb={5}>
                   Time Zone
                 </FormLabel>
                 <Field
-                    as={Input}
-                    id='timeZone'
-                    name='timeZone'
-                    type='text' //TODO check type
-                    placeholder='Enter timezone'
-                    fontSize='sm'
+                  as={Input}
+                  id='timeZone'
+                  name='timeZone'
+                  type='text' //TODO check type
+                  placeholder='Enter timezone'
+                  fontSize='sm'
+                />
+                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+              </FormControl>
+
+              <Text fontSize='lg' mb={5}>
+                Experience
+              </Text>
+
+              <FormControl
+                isRequired
+                isInvalid={!!errors.eventName && touched.eventName}
+              >
+                <FormLabel htmlFor='companyName' fontSize='sm' mb={5}>
+                  Company Name
+                </FormLabel>
+                <Field
+                  as={Input}
+                  id='companyName'
+                  name='companyName'
+                  type='text'
+                  placeholder='Enter company name'
+                  fontSize='sm'
+                />
+                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl
+                isRequired
+                isInvalid={!!errors.eventName && touched.eventName}
+              >
+                <FormLabel htmlFor='jobTitle' fontSize='sm' mb={5}>
+                  Job Title
+                </FormLabel>
+                <Field
+                  as={Input}
+                  id='jobTitle'
+                  name='jobTitle'
+                  type='text'
+                  placeholder='Enter job title'
+                  fontSize='sm'
                 />
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
@@ -254,19 +236,15 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
 
               {/*TODO add dropdown menu for years of experience*/}
 
-                <FormLabel htmlFor='preferenceSection' fontSize='lg' mb={5}>
-                  Mentee Preferences
-                </FormLabel>
+              <Text fontSize='lg' mb={5}>
+                Mentee Preferences
+              </Text>
 
               {/*TODO add toggle for "Open to Multiple Mentor/mentees*/}
 
               {/*TODO add dropdown menu for gender preference of mentor*/}
 
               {/*TODO add type box with fuzzy logic to type in skills*/}
-
-
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
-              </FormControl>
 
               <Button type='submit' colorScheme='pennBlue'>
                 Submit application

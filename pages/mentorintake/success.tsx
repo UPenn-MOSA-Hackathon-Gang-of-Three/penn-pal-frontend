@@ -30,13 +30,15 @@ const Home: NextPage = () => {
             Event created successful
           </Heading>
           <Text mb={7}>
-            Thank you for help professionals and students connect with others around the world!
+            Thank you for help professionals and students connect with others
+            around the world!
           </Text>
-          <ButtonLink to='/event/new' size='sm' sx={{ mr: 3, mt: 3 }}>
+          <ButtonLink to='/event/new' sx={{ mr: 3, mt: 3 }}>
             New Event
           </ButtonLink>
-          <ButtonLink to='/event/status' outline size='sm' sx={{ mt: 3 }}> #TODO update the link
-            Back Home
+          <ButtonLink to='/event/status' outline sx={{ mt: 3 }}>
+            {' '}
+            #TODO update the link Back Home
           </ButtonLink>
         </Box>
         <Box w={{ base: '100%', lg: 'calc(60% - 1rem)' }}>

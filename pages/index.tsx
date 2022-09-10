@@ -3,7 +3,7 @@ import Lottie from 'lottie-react';
 
 import ButtonLink from 'components/buttonLink';
 
-import collaborateAnimation from 'assets/collaborateAnimation.json';
+import handshake from 'assets/handshake.json';
 
 import type { NextPage } from 'next';
 
@@ -17,6 +17,7 @@ const Home: NextPage = () => {
       minHeight='100vh'
     >
       <Flex
+        w='full'
         flexDirection={{ base: 'column-reverse', lg: 'row' }}
         justifyContent='space-between'
         alignItems='center'
@@ -32,15 +33,15 @@ const Home: NextPage = () => {
           <Text mb={7}>
             Help professionals and students connect with others around the world
           </Text>
-          <ButtonLink to='/event/new' size='sm' sx={{ mr: 3, mt: 3 }}>
+          <ButtonLink to='/event/new' sx={{ mr: 3, mt: 3 }}>
             Create an event
           </ButtonLink>
-          <ButtonLink to='/event/status' outline size='sm' sx={{ mt: 3 }}>
+          <ButtonLink to='/event/status' outline sx={{ mt: 3 }}>
             View status
           </ButtonLink>
         </Box>
-        <Box w={{ base: '100%', lg: 'calc(60% - 1rem)' }}>
-          <Lottie animationData={collaborateAnimation} loop />
+        <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 4 }}>
+          <Lottie animationData={handshake} loop />
         </Box>
       </Flex>
     </Container>

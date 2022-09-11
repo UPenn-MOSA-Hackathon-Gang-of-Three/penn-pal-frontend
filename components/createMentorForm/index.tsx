@@ -1,47 +1,51 @@
 import { useRef } from 'react';
 import * as Yup from 'yup';
+import 'yup-phone';
 import { Formik, Form, Field } from 'formik';
 import {
   VStack,
   FormControl,
+  Text,
   FormLabel,
   FormHelperText,
   FormErrorMessage,
   Input,
-  Textarea,
-  Text,
   Button,
 } from '@chakra-ui/react';
 
 import { FormikValues, FormikErrors } from 'formik';
 
-const CreateMentorSchema = Yup.object().shape({
-  eventName: Yup.string().required('Field is required'),
-  closingDate: Yup.string().required('Field is required'),
-  emails: Yup.string().required('Field is required'),
+const RegistrantSchema = Yup.object().shape({
+  firstName: Yup.string().required('Field is required'),
+  lastName: Yup.string().required('Field is required'),
+  gender: Yup.string().required('Field is required'),
+  email: Yup.string().email('Invalid email').required('Field is required'),
+  phoneNumber: Yup.lazy(value =>
+    !value
+      ? Yup.string()
+      : Yup.string().phone(undefined, undefined, 'Invalid phone number')
+  ),
+  timeZone: Yup.string().required('Field is required'),
+  location: Yup.string(),
+  yearsOfExperience: Yup.number().required('Field is required'),
+  companyName: Yup.string(),
+  jobTitle: Yup.string(),
+  certifications: Yup.array().of(Yup.string()),
+  skills: Yup.array().of(Yup.string()),
+  isOpenToMultiple: Yup.boolean().required('Field is required'),
+  genderPreference: Yup.string().required('Field is required'),
 });
 
 const calcProgress = (
   values: FormikValues,
-  errors: FormikErrors<any>,
-  hasValidEmail: boolean
+  errors: FormikErrors<any>
 ): number => {
   const totalFields = Object.keys(values).length;
   const validFields = Object.keys(values).filter(
-    field =>
-      !errors[field] &&
-      Boolean(values[field]) &&
-      (field !== 'emails' || hasValidEmail)
+    field => !errors[field]
   ).length;
 
   return Math.floor((validFields / totalFields) * 100);
-};
-
-const validateEmails = (emailsStr: string): string[] => {
-  const potentialEmails = emailsStr.split(/[\s,]+/);
-  return potentialEmails.filter(
-    email => Boolean(email) && /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)
-  );
 };
 
 type Props = {
@@ -49,29 +53,35 @@ type Props = {
   onSubmit: Function;
 };
 
-const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
+const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
   const progressRef = useRef(0);
 
   return (
     <Formik
       initialValues={{
-        eventName: '',
-        closingDate: '',
-        emails: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        email: '',
+        phoneNumber: '',
+        timeZone: '',
+        location: '',
+        yearsOfExperience: null,
+        companyName: '',
+        jobTitle: '',
+        certifications: [],
+        skills: [],
+        isOpenToMultiple: false,
+        genderPreference: '',
       }}
       onSubmit={values =>
-        onSubmit({ ...values, emails: validateEmails(values.emails) })
+        // TODO: Handle submission processing
+        onSubmit(values)
       }
-      validationSchema={CreateMentorSchema}
+      validationSchema={RegistrantSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {
-        const validEmails = validateEmails(values.emails);
-        const newProgress = calcProgress(
-          values,
-          errors,
-          Boolean(validEmails.length)
-        );
-
+        const newProgress = calcProgress(values, errors);
         if (progressRef.current !== newProgress) {
           onProgressChange(newProgress);
           progressRef.current = newProgress;
@@ -79,58 +89,57 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
 
         return (
           <Form onSubmit={handleSubmit} noValidate>
-            <VStack spacing={{ base: 16, lg: 20 }}>
-              <Text fontSize='lg' mb={5}>
-                Personal Information
+            <VStack spacing={{ base: 8, lg: 8 }} alignItems='start'>
+              <Text fontSize='lg' fontWeight={500} color='blackAlpha.600'>
+                1. Personal Information
               </Text>
-
               <FormControl
                 isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
+                isInvalid={!!errors.firstName && touched.firstName}
               >
-                <FormLabel htmlFor='firstName' fontSize='sm' mb={5}>
-                  First Name
+                <FormLabel htmlFor='firstName' fontSize='sm' mb={1}>
+                  First name
                 </FormLabel>
                 <Field
                   as={Input}
                   id='firstName'
                   name='firstName'
                   type='text'
-                  placeholder='Enter first name'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
               </FormControl>
-
               <FormControl
                 isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
+                isInvalid={!!errors.lastName && touched.lastName}
               >
-                <FormLabel htmlFor='lastName' fontSize='sm' mb={5}>
-                  Last Name
+                <FormLabel htmlFor='lastName' fontSize='sm' mb={1}>
+                  Last name
                 </FormLabel>
                 <Field
                   as={Input}
                   id='lastName'
                   name='lastName'
                   type='text'
-                  placeholder='Enter last name'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
               </FormControl>
-
               {/*TODO add gender*/}
 
-              <Text fontSize='lg' mb={5}>
-                Contact Information
+              <Text
+                fontSize='lg'
+                fontWeight={500}
+                color='blackAlpha.600'
+                pt={8}
+              >
+                2. Contact Information
               </Text>
-
               <FormControl
                 isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
+                isInvalid={!!errors.email && touched.email}
               >
-                <FormLabel htmlFor='email' fontSize='sm' mb={5}>
+                <FormLabel htmlFor='email' fontSize='sm' mb={1}>
                   Email
                 </FormLabel>
                 <Field
@@ -138,29 +147,31 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   id='email'
                   name='email'
                   type='text'
-                  placeholder='Enter email address'
+                  placeholder='human@email.com'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!errors.eventName && touched.eventName}>
-                <FormLabel htmlFor='phoneNumber' fontSize='sm' mb={5}>
+              <FormControl
+                isInvalid={!!errors.phoneNumber && touched.phoneNumber}
+              >
+                <FormLabel htmlFor='phoneNumber' fontSize='sm' mb={1}>
                   Phone number
                 </FormLabel>
                 <Field
                   as={Input}
                   id='phoneNumber'
                   name='phoneNumber'
-                  type='phone' //TODO check this type
-                  placeholder='Enter phone number'
+                  type='tel'
+                  placeholder='(123) 456-7890'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!errors.eventName && touched.eventName}>
-                <FormLabel htmlFor='location' fontSize='sm' mb={5}>
+              <FormControl isInvalid={!!errors.location && touched.location}>
+                <FormLabel htmlFor='location' fontSize='sm' mb={1}>
                   Location
                 </FormLabel>
                 <Field
@@ -168,57 +179,57 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   id='location'
                   name='location'
                   type='text'
-                  placeholder='Enter location'
+                  placeholder='Where are you?'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.location}</FormErrorMessage>
               </FormControl>
 
+              {/*  TODO: Convert to select */}
               <FormControl
                 isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
+                isInvalid={!!errors.timeZone && touched.timeZone}
               >
-                <FormLabel htmlFor='timeZone' fontSize='sm' mb={5}>
-                  Time Zone
+                <FormLabel htmlFor='timeZone' fontSize='sm' mb={1}>
+                  Time zone
                 </FormLabel>
                 <Field
                   as={Input}
                   id='timeZone'
                   name='timeZone'
-                  type='text' //TODO check type
-                  placeholder='Enter timezone'
+                  type='text'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.timeZone}</FormErrorMessage>
               </FormControl>
 
-              <Text fontSize='lg' mb={5}>
-                Experience
-              </Text>
-
-              <FormControl
-                isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
+              <Text
+                fontSize='lg'
+                fontWeight={500}
+                color='blackAlpha.600'
+                pt={8}
               >
-                <FormLabel htmlFor='companyName' fontSize='sm' mb={5}>
-                  Company Name
+                3. Experience
+              </Text>
+              <FormControl
+                isInvalid={!!errors.companyName && touched.companyName}
+              >
+                <FormLabel htmlFor='companyName' fontSize='sm' mb={1}>
+                  Company name
                 </FormLabel>
                 <Field
                   as={Input}
                   id='companyName'
                   name='companyName'
                   type='text'
-                  placeholder='Enter company name'
+                  placeholder='Work, Inc.'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.companyName}</FormErrorMessage>
               </FormControl>
 
-              <FormControl
-                isRequired
-                isInvalid={!!errors.eventName && touched.eventName}
-              >
-                <FormLabel htmlFor='jobTitle' fontSize='sm' mb={5}>
+              <FormControl isInvalid={!!errors.jobTitle && touched.jobTitle}>
+                <FormLabel htmlFor='jobTitle' fontSize='sm' mb={1}>
                   Job Title
                 </FormLabel>
                 <Field
@@ -226,10 +237,10 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   id='jobTitle'
                   name='jobTitle'
                   type='text'
-                  placeholder='Enter job title'
+                  placeholder='What do you do?'
                   fontSize='sm'
                 />
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.jobTitle}</FormErrorMessage>
               </FormControl>
 
               {/*TODO add certification toggles*/}
@@ -257,4 +268,4 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
   );
 };
 
-export default CreateEventForm; //TODO update
+export default RegisterEventForm;

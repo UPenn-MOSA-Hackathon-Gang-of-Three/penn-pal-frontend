@@ -10,10 +10,16 @@ import {
   FormHelperText,
   FormErrorMessage,
   Input,
+  Select,
   Button,
 } from '@chakra-ui/react';
+import countries from 'world_countries_lists/data/countries/en/countries.json';
+import { timeZonesNames } from '@vvo/tzdb';
 
-import { FormikValues, FormikErrors } from 'formik';
+import type { FormikValues, FormikErrors } from 'formik';
+
+const countriesOptions = countries.map(c => c.name);
+const timeZoneOptions = timeZonesNames.map(name => name.replace('_', ' '));
 
 const RegistrantSchema = Yup.object().shape({
   firstName: Yup.string().required('Field is required'),
@@ -26,7 +32,7 @@ const RegistrantSchema = Yup.object().shape({
       : Yup.string().phone(undefined, undefined, 'Invalid phone number')
   ),
   timeZone: Yup.string().required('Field is required'),
-  location: Yup.string(),
+  country: Yup.string(),
   yearsOfExperience: Yup.number().required('Field is required'),
   companyName: Yup.string(),
   jobTitle: Yup.string(),
@@ -65,7 +71,7 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
         email: '',
         phoneNumber: '',
         timeZone: '',
-        location: '',
+        country: '',
         yearsOfExperience: null,
         companyName: '',
         jobTitle: '',
@@ -81,6 +87,7 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
       validationSchema={RegistrantSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {
+        console.log(values);
         const newProgress = calcProgress(values, errors);
         if (progressRef.current !== newProgress) {
           onProgressChange(newProgress);
@@ -170,22 +177,26 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!errors.location && touched.location}>
-                <FormLabel htmlFor='location' fontSize='sm' mb={1}>
-                  Location
+              <FormControl isInvalid={!!errors.country && touched.country}>
+                <FormLabel htmlFor='country' fontSize='sm' mb={1}>
+                  Country
                 </FormLabel>
                 <Field
-                  as={Input}
-                  id='location'
-                  name='location'
-                  type='text'
+                  as={Select}
+                  id='country'
+                  name='country'
                   placeholder='Where are you?'
                   fontSize='sm'
-                />
-                <FormErrorMessage>{errors.location}</FormErrorMessage>
+                >
+                  {countriesOptions.map(option => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Field>
+                <FormErrorMessage>{errors.country}</FormErrorMessage>
               </FormControl>
 
-              {/*  TODO: Convert to select */}
               <FormControl
                 isRequired
                 isInvalid={!!errors.timeZone && touched.timeZone}
@@ -194,12 +205,18 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   Time zone
                 </FormLabel>
                 <Field
-                  as={Input}
+                  as={Select}
                   id='timeZone'
                   name='timeZone'
-                  type='text'
+                  placeholder='What time is it?'
                   fontSize='sm'
-                />
+                >
+                  {timeZoneOptions.map(option => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Field>
                 <FormErrorMessage>{errors.timeZone}</FormErrorMessage>
               </FormControl>
 

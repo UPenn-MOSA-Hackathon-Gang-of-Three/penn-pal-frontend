@@ -55,7 +55,7 @@ const NewEvent: NextPage = () => {
           size='xs'
           hasStripe
           isAnimated
-          colorScheme='pennBlue'
+          colorScheme='palBlue'
         />
       </Box>
       <Container maxW={{ base: '100%', lg: '2xl' }} py={{ base: 12, lg: 20 }}>

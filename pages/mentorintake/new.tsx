@@ -56,7 +56,7 @@ const NewEvent: NextPage = () => {
           size='xs'
           hasStripe
           isAnimated
-          colorScheme='pennBlue'
+          colorScheme='palBlue'
         />
       </Box>
       <Container
@@ -82,7 +82,7 @@ const NewEvent: NextPage = () => {
                   left: `calc(50% - 2.5rem)`,
                   top: `calc(50% - 2.5rem)`,
                   borderRadius: '50%',
-                  bg: 'pennBlue.50',
+                  bg: 'palBlue.50',
                   boxShadow: '0 0 6rem 6rem #ffe4ad',
                   transition: 'all 0.6s',
                   opacity: 0,
@@ -125,7 +125,7 @@ const NewEvent: NextPage = () => {
                   left: `calc(50% - 2.5rem)`,
                   top: `calc(50% - 2.5rem)`,
                   borderRadius: '50%',
-                  bg: 'pennBlue.50',
+                  bg: 'palBlue.50',
                   boxShadow: '0 0 6rem 6rem #c1f7f7',
                   transition: 'all 0.6s',
                   opacity: 0,

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import 'yup-phone';
-import { Formik, Form, Field, FormikTouched } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import {
   VStack,
   Flex,
@@ -104,7 +104,6 @@ const RegisterEventForm = ({
       validationSchema={RegistrantSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {
-        console.log(values);
         const newProgress = calcProgress(values, errors);
         if (progressRef.current !== newProgress) {
           onProgressChange(newProgress);
@@ -455,6 +454,7 @@ const RegisterEventForm = ({
               <FormControl
                 isRequired
                 isInvalid={!!errors.otherGenderPref && touched.otherGenderPref}
+                pb={8}
               >
                 <Flex
                   mt={{ base: 0, lg: 2 }}
@@ -495,7 +495,7 @@ const RegisterEventForm = ({
 
               {/*TODO add type box with fuzzy logic to type in skills*/}
 
-              <Button type='submit' colorScheme='pennBlue'>
+              <Button type='submit' colorScheme='palBlue'>
                 Submit application
               </Button>
             </VStack>

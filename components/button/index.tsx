@@ -32,8 +32,10 @@ const Button = ({
     type={type}
     onClick={onClick}
     sx={sx}
-    colorScheme={outline ? 'blackAlpha' : 'pennBlue'}
+    colorScheme={outline ? 'blackAlpha' : 'palBlue'}
     variant={outline ? 'outline' : 'solid'}
+    _hover={outline ? { color: 'palBlue.500' } : undefined}
+    _focus={outline ? { color: 'palBlue.500' } : undefined}
   >
     {children}
   </ChakraButton>

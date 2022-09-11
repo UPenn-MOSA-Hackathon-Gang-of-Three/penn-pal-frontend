@@ -1,4 +1,5 @@
 import { Container, Flex, Box, Heading, Text } from '@chakra-ui/react';
+import NextImage from 'next/image';
 import Lottie from 'lottie-react';
 
 import ButtonLink from 'components/buttonLink';
@@ -28,7 +29,13 @@ const Home: NextPage = () => {
           textAlign={{ base: 'center', lg: 'left' }}
           mt={{ base: 7, lg: 0 }}
         >
-          <Heading as='h1' size='2xl' mb={4}>
+          <NextImage
+            src='/penn-pal-logo.png'
+            width='150px'
+            height='150px'
+            style={{ borderRadius: '1rem' }}
+          />
+          <Heading as='h1' size='2xl' mt={8} mb={4}>
             Match mentees with mentors
           </Heading>
           <Text mb={7}>

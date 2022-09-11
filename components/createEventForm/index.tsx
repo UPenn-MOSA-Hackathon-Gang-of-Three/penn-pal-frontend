@@ -135,11 +135,11 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   fontSize='sm'
                   height='3xs'
                 />
-                {validEmails.length || touched.emails ? (
-                  <FormHelperText>
-                    {validEmails.length} email(s) found
-                  </FormHelperText>
-                ) : null}
+                <FormHelperText>
+                  {validEmails.length || touched.emails
+                    ? `${validEmails.length} email(s) found`
+                    : 'If you have a spreadsheet, you can copy-paste the emails in'}
+                </FormHelperText>
                 <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
               </FormControl>
 

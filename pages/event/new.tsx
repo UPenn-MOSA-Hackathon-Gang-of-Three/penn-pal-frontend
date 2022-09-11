@@ -40,7 +40,7 @@ const NewEvent: NextPage = () => {
       >
         <Container maxW={{ base: '100%', lg: '2xl' }} mb={{ base: 7, lg: 10 }}>
           <Heading fontSize={{ base: 'lg', lg: '3xl' }} fontWeight='600'>
-            Mentor Application
+            Create Mentor-Mentee Event
           </Heading>
           <Text
             mt={3}

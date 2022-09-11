@@ -66,12 +66,12 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
     >
       {({ handleSubmit, values, errors, touched }) => {
         const validEmails = validateEmails(values.emails);
+
         const newProgress = calcProgress(
           values,
           errors,
           Boolean(validEmails.length)
         );
-
         if (progressRef.current !== newProgress) {
           onProgressChange(newProgress);
           progressRef.current = newProgress;
@@ -79,13 +79,13 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
 
         return (
           <Form onSubmit={handleSubmit} noValidate>
-            <VStack spacing={{ base: 16, lg: 20 }}>
+            <VStack spacing={{ base: 16, lg: 20 }} alignItems='start'>
               <FormControl
                 isRequired
                 isInvalid={!!errors.eventName && touched.eventName}
               >
                 <FormLabel htmlFor='eventName' fontSize='sm' mb={5}>
-                  1. What do you want to name your matching event?
+                  What do you want to name your matching event?
                 </FormLabel>
                 <Field
                   as={Input}
@@ -103,7 +103,7 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 isInvalid={!!errors.closingDate && touched.closingDate}
               >
                 <FormLabel htmlFor='closingDate' fontSize='sm' mb={5}>
-                  2. When do you want registration to end?
+                  When do you want registration to end?
                 </FormLabel>
                 <Field
                   as={Input}
@@ -124,7 +124,7 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 isInvalid={!!errors.emails && touched.emails}
               >
                 <FormLabel htmlFor='emails' fontSize='sm' mb={5}>
-                  3. Email addresses of participants
+                  Email addresses of participants
                 </FormLabel>
                 <Field
                   as={Textarea}

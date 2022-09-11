@@ -4,7 +4,7 @@ import Lottie from 'lottie-react';
 
 import ButtonLink from 'components/buttonLink';
 
-import handshake from 'assets/handshake.json';
+import helloGroup from 'assets/helloGroup.json';
 
 import type { NextPage } from 'next';
 
@@ -47,8 +47,8 @@ const Home: NextPage = () => {
             View status
           </ButtonLink>
         </Box>
-        <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 4 }}>
-          <Lottie animationData={handshake} loop />
+        <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 8 }}>
+          <Lottie animationData={helloGroup} loop />
         </Box>
       </Flex>
     </Container>

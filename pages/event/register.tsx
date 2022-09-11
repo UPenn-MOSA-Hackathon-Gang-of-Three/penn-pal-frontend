@@ -43,7 +43,7 @@ const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
       pathname: '/event/success',
       query: {
         participantName: values.firstName,
-        uniqueId: 12345,
+        uniqueId: 12345, // TODO: Get unique ID from BE
       },
     });
   };

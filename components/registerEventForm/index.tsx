@@ -79,7 +79,10 @@ const calcProgress = (
 ): number => {
   const totalFields = Object.keys(values).length;
   const validFields = Object.keys(values).filter(
-    field => !errors[field] && Boolean(values[field])
+    field =>
+      !errors[field] &&
+      (Boolean(values[field]) ||
+        ['number', 'boolean'].includes(typeof values[field]))
   ).length;
 
   return Math.floor((validFields / totalFields) * 100);
@@ -138,7 +141,7 @@ const RegisterEventForm = ({
           <Form onSubmit={handleSubmit} noValidate>
             <VStack spacing={{ base: 8, lg: 8 }} alignItems='start'>
               {/*  PERSONAL INFORMATION SECTION */}
-              <Text fontSize='lg' fontWeight={500} color='blackAlpha.600'>
+              <Text fontSize='lg' color='blackAlpha.600'>
                 1. Personal Information
               </Text>
               <SimpleGrid
@@ -219,7 +222,6 @@ const RegisterEventForm = ({
               {/*  CONTACT INFORMATION SECTION */}
               <Text
                 fontSize='lg'
-                fontWeight={500}
                 color='blackAlpha.600'
                 pt={{ base: 12, lg: 8 }}
               >
@@ -315,7 +317,6 @@ const RegisterEventForm = ({
               {/* EXPERIENCE SECTION */}
               <Text
                 fontSize='lg'
-                fontWeight={500}
                 color='blackAlpha.600'
                 pt={{ base: 12, lg: 8 }}
               >
@@ -447,7 +448,6 @@ const RegisterEventForm = ({
               {/* MENTEE/MENTOR PREFERENCES SECTION */}
               <Text
                 fontSize='lg'
-                fontWeight={500}
                 color='blackAlpha.600'
                 pt={{ base: 12, lg: 8 }}
               >

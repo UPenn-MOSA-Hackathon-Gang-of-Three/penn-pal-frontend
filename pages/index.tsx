@@ -28,13 +28,14 @@ const Home: NextPage = () => {
           textAlign={{ base: 'center', lg: 'left' }}
           mt={{ base: 7, lg: 0 }}
         >
-          <NextImage
-            src='/penn-pal-logo.png'
-            width='150px'
-            height='150px'
-            style={{ borderRadius: '1rem' }}
-          />
-          <Heading as='h1' size='2xl' mt={8} mb={4}>
+          <Box ml={{ base: 0, lg: -6 }}>
+            <NextImage
+              src='/penn-pal-logo-transparent.png'
+              width='200px'
+              height='200px'
+            />
+          </Box>
+          <Heading as='h1' size='2xl' mt={6} mb={4}>
             Match mentees with mentors
           </Heading>
           <Text mb={7}>

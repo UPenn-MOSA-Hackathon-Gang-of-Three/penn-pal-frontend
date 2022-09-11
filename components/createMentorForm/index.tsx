@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import 'yup-phone';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikTouched } from 'formik';
 import {
   VStack,
   Flex,
@@ -60,18 +60,23 @@ const calcProgress = (
 ): number => {
   const totalFields = Object.keys(values).length;
   const validFields = Object.keys(values).filter(
-    field => !errors[field]
+    field => !errors[field] && Boolean(values[field])
   ).length;
 
   return Math.floor((validFields / totalFields) * 100);
 };
 
 type Props = {
+  participantType: 'mentor' | 'mentee';
   onProgressChange: Function;
   onSubmit: Function;
 };
 
-const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
+const RegisterEventForm = ({
+  participantType,
+  onProgressChange,
+  onSubmit,
+}: Props) => {
   const progressRef = useRef(0);
 
   return (
@@ -424,7 +429,8 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 color='blackAlpha.600'
                 pt={8}
               >
-                4. Mentee Preferences
+                4. {participantType === 'mentor' ? 'Mentee' : 'Mentor'}{' '}
+                Preferences
               </Text>
               <FormControl
                 isRequired
@@ -436,7 +442,8 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 alignItems={{ base: 'start', lg: 'center' }}
               >
                 <FormLabel htmlFor='isOpenToMultiple' fontSize='sm' mt={2}>
-                  Open to multiple mentees?
+                  Open to multiple{' '}
+                  {participantType === 'mentor' ? 'mentees' : 'mentors'}?
                 </FormLabel>
                 <Field
                   as={Switch}
@@ -460,7 +467,8 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                     mb={1}
                     sx={{ whiteSpace: 'nowrap' }}
                   >
-                    Gender preference of mentee?
+                    Gender preference of{' '}
+                    {participantType === 'mentor' ? 'mentee' : 'mentor'}?
                   </FormLabel>
                   <Box w='full'>
                     <Field

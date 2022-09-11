@@ -4,10 +4,9 @@ import Lottie from 'lottie-react';
 
 import ButtonLink from 'components/buttonLink';
 
-import strapi, { createHeaders } from 'utils/request/strapi';
 import handshake from 'assets/handshake.json';
 
-import type { NextPage, NextPageContext } from 'next';
+import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
   return (
@@ -57,21 +56,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-export const getServerSideProps = async (context: NextPageContext) => {
-  let certifications = [];
-  try {
-    const headers = createHeaders(context);
-    const {
-      data: { data: certificationsResponse },
-    } = await strapi.get('/certifications', {
-      headers,
-    });
-
-    certifications = certificationsResponse;
-  } catch {
-    // Do nothing
-  }
-
-  return { props: { certifications } };
-};

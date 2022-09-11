@@ -16,9 +16,9 @@ import Button from 'components/button';
 import type { FormikValues, FormikErrors } from 'formik';
 
 const CreateEventSchema = Yup.object().shape({
-  eventName: Yup.string().required('Field is required'),
-  closingDate: Yup.string().required('Field is required'),
-  emails: Yup.string().required('Field is required'),
+  eventName: Yup.string().required('Please fill out field'),
+  closingDate: Yup.string().required('Please fill out field'),
+  emails: Yup.string().required('Please fill out field'),
 });
 
 const calcProgress = (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   SlideFade,
   Container,
@@ -11,18 +12,41 @@ import {
 } from '@chakra-ui/react';
 import Lottie from 'lottie-react';
 
-import CreateMentorForm from 'components/createMentorForm';
+import RegisterEventForm from 'components/registerEventForm';
 
+import strapi, { createHeaders } from '../../utils/request/strapi';
 import mentee from 'assets/mentee.json';
 import mentor from 'assets/mentor.json';
 
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
+import type { Certification, Skill } from 'types';
+import type { FormikValues } from 'formik';
 
-const NewEvent: NextPage = () => {
+type Props = {
+  certifications: Certification[];
+  skills: Skill[];
+};
+
+const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
+  const router = useRouter();
+
   const [participantType, setParticipantType] = useState<
     'mentor' | 'mentee' | undefined
   >();
   const [progress, setProgress] = useState<number>(0);
+
+  const handleAddCertification = console.log;
+
+  const handleSubmit = (values: FormikValues) => {
+    console.log(values);
+    router.push({
+      pathname: '/event/success',
+      query: {
+        participantName: values.firstName,
+        uniqueId: 12345,
+      },
+    });
+  };
 
   return (
     <SlideFade in offsetY='100vh'>
@@ -154,10 +178,13 @@ const NewEvent: NextPage = () => {
             </Flex>
           </SimpleGrid>
         ) : (
-          <CreateMentorForm
+          <RegisterEventForm
             participantType={participantType}
+            certifications={certifications}
+            skills={skills}
+            onAddCertification={handleAddCertification}
             onProgressChange={setProgress}
-            onSubmit={console.log}
+            onSubmit={handleSubmit}
           />
         )}
       </Container>
@@ -165,4 +192,30 @@ const NewEvent: NextPage = () => {
   );
 };
 
-export default NewEvent;
+export default RegisterEvent;
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  let certifications = [];
+  let skills = [];
+  try {
+    const headers = createHeaders(context);
+    const {
+      data: { data: certificationsResponse },
+    } = await strapi.get('/certifications', {
+      headers,
+    });
+    certifications = certificationsResponse;
+
+    const {
+      data: { data: skillsResponse },
+    } = await strapi.get('/skills', {
+      headers,
+    });
+    skills = skillsResponse;
+  } catch (error) {
+    console.log(error);
+    // Do nothing
+  }
+
+  return { props: { certifications, skills } };
+};

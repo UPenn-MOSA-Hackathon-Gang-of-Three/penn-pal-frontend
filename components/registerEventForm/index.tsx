@@ -22,36 +22,40 @@ import {
   Button,
   SimpleGrid,
 } from '@chakra-ui/react';
+
+import CreatableSelect from 'components/creatableSelect';
+
 import countries from 'world_countries_lists/data/countries/en/countries.json';
 import { timeZonesNames } from '@vvo/tzdb';
 
 import type { FormikValues, FormikErrors } from 'formik';
+import type { Certification, Skill } from 'types';
 
 const countriesOptions = countries.map(c => c.name);
 const timeZoneOptions = timeZonesNames.map(name => name.replace('_', ' '));
 
 const RegistrantSchema = Yup.object().shape({
-  firstName: Yup.string().required('Field is required'),
-  lastName: Yup.string().required('Field is required'),
-  gender: Yup.string().required('Field is required'),
-  email: Yup.string().email('Invalid email').required('Field is required'),
+  firstName: Yup.string().required('Please fill out field'),
+  lastName: Yup.string().required('Please fill out field'),
+  gender: Yup.string().required('Please fill out field'),
+  email: Yup.string().email('Invalid email').required('Please fill out field'),
   phoneNumber: Yup.lazy(value =>
     !value
       ? Yup.string()
       : Yup.string().phone(undefined, undefined, 'Invalid phone number')
   ),
-  timeZone: Yup.string().required('Field is required'),
+  timeZone: Yup.string().required('Please fill out field'),
   country: Yup.string(),
   companyName: Yup.string(),
   jobTitle: Yup.string(),
   yearsOfExperience: Yup.number()
-    .required('Field is required')
+    .required('Please fill out field')
     .min(0, 'Too low')
     .max(100, 'Too high'),
   certifications: Yup.array().of(Yup.string()),
   skills: Yup.array().of(Yup.string()),
-  isOpenToMultiple: Yup.boolean().required('Field is required'),
-  otherGenderPref: Yup.string().required('Field is required'),
+  isOpenToMultiple: Yup.boolean().required('Please fill out field'),
+  otherGenderPref: Yup.string().required('Please fill out field'),
 });
 
 const calcProgress = (
@@ -68,12 +72,17 @@ const calcProgress = (
 
 type Props = {
   participantType: 'mentor' | 'mentee';
+  certifications: Certification[];
+  skills: Skill[];
+  onAddCertification: Function;
   onProgressChange: Function;
   onSubmit: Function;
 };
 
 const RegisterEventForm = ({
   participantType,
+  certifications,
+  skills,
   onProgressChange,
   onSubmit,
 }: Props) => {
@@ -377,48 +386,47 @@ const RegisterEventForm = ({
                   </Box>
                 </Flex>
               </FormControl>
-              {/*certification toggles*/}
-              <Text fontSize='md' mb={5}>
-                {' '}
-                Certifications{' '}
-              </Text>
-
-              <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
-                <FormLabel htmlFor='cpa' mb='0'>
-                  {' '}
-                  CPA{' '}
+              <FormControl>
+                <FormLabel htmlFor='certifications' fontSize='sm' mb={1}>
+                  Certifications
                 </FormLabel>
-                <Switch id='cpa' />
-
-                <FormLabel htmlFor='cpa' mb='0'>
-                  {' '}
-                  CIA{' '}
+                <Field id='certifications' name='certifications'>
+                  {/*  @ts-ignore */}
+                  {({ field, form }) => (
+                    <CreatableSelect
+                      {...field}
+                      options={certifications.map(c => ({
+                        label: c.attributes.name,
+                        value: c.attributes.name,
+                      }))}
+                      onChange={(options: any) =>
+                        form.setFieldValue(field.name, options)
+                      }
+                    />
+                  )}
+                </Field>
+                <FormErrorMessage>{errors.certifications}</FormErrorMessage>
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor='skills' fontSize='sm' mb={1}>
+                  Skills
                 </FormLabel>
-                <Switch id='cia' />
-
-                <FormLabel htmlFor='cisa' mb='0'>
-                  {' '}
-                  CISA{' '}
-                </FormLabel>
-                <Switch id='cisa' />
-
-                <FormLabel htmlFor='pmp' mb='0'>
-                  {' '}
-                  PMP{' '}
-                </FormLabel>
-                <Switch id='pmp' />
-
-                <FormLabel htmlFor='cfe' mb='0'>
-                  {' '}
-                  CFE{' '}
-                </FormLabel>
-                <Switch id='cfe' />
-
-                <FormLabel htmlFor='crma' mb='0'>
-                  {' '}
-                  CRMA{' '}
-                </FormLabel>
-                <Switch id='crma' />
+                <Field id='skills' name='skills'>
+                  {/*  @ts-ignore */}
+                  {({ field, form }) => (
+                    <CreatableSelect
+                      {...field}
+                      options={skills.map(s => ({
+                        label: s.attributes.name,
+                        value: s.attributes.name,
+                      }))}
+                      onChange={(options: any) =>
+                        form.setFieldValue(field.name, options)
+                      }
+                    />
+                  )}
+                </Field>
+                <FormErrorMessage>{errors.skills}</FormErrorMessage>
               </FormControl>
 
               {/* MENTEE/MENTOR PREFERENCES SECTION */}
@@ -492,8 +500,6 @@ const RegisterEventForm = ({
                   </Box>
                 </Flex>
               </FormControl>
-
-              {/*TODO add type box with fuzzy logic to type in skills*/}
 
               <Button type='submit' colorScheme='palBlue'>
                 Submit application

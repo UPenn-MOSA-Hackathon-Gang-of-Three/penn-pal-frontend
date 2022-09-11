@@ -11,7 +11,14 @@ import {
   FormErrorMessage,
   Input,
   Select,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Switch,
   Button,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import countries from 'world_countries_lists/data/countries/en/countries.json';
 import { timeZonesNames } from '@vvo/tzdb';
@@ -132,7 +139,17 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 />
                 <FormErrorMessage>{errors.lastName}</FormErrorMessage>
               </FormControl>
-              {/*TODO add gender*/}
+              <FormControl isRequired display='flex' alignItems='center'>
+                <FormLabel htmlFor='gender' mb='0'>
+                  {' '}
+                  Gender{' '}
+                </FormLabel>
+                <Select placeholder='Select option'>
+                  <option value='male'>Male</option>
+                  <option value='female'>Female </option>
+                  <option value='other'>Other </option>
+                </Select>
+              </FormControl>
 
               <Text
                 fontSize='lg'
@@ -260,17 +277,89 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 <FormErrorMessage>{errors.jobTitle}</FormErrorMessage>
               </FormControl>
 
-              {/*TODO add certification toggles*/}
+              {/*certification toggles*/}
+              <Text fontSize='md' mb={5}>
+                {' '}
+                Certifications{' '}
+              </Text>
 
-              {/*TODO add dropdown menu for years of experience*/}
+              <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
+                <FormLabel htmlFor='cpa' mb='0'>
+                  {' '}
+                  CPA{' '}
+                </FormLabel>
+                <Switch id='cpa' />
+
+                <FormLabel htmlFor='cpa' mb='0'>
+                  {' '}
+                  CIA{' '}
+                </FormLabel>
+                <Switch id='cia' />
+
+                <FormLabel htmlFor='cisa' mb='0'>
+                  {' '}
+                  CISA{' '}
+                </FormLabel>
+                <Switch id='cisa' />
+
+                <FormLabel htmlFor='pmp' mb='0'>
+                  {' '}
+                  PMP{' '}
+                </FormLabel>
+                <Switch id='pmp' />
+
+                <FormLabel htmlFor='cfe' mb='0'>
+                  {' '}
+                  CFE{' '}
+                </FormLabel>
+                <Switch id='cfe' />
+
+                <FormLabel htmlFor='crma' mb='0'>
+                  {' '}
+                  CRMA{' '}
+                </FormLabel>
+                <Switch id='crma' />
+              </FormControl>
+
+              {/* Number Input: Years of Experience*/}
+              <FormControl isRequired display='flex' alignItems='center'>
+                <FormLabel htmlFor='yearsOfExperience' mb='0'>
+                  {' '}
+                  Years of Experience{' '}
+                </FormLabel>
+                <NumberInput defaultValue={15} min={0} max={50}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
 
               <Text fontSize='lg' mb={5}>
                 Mentee Preferences
               </Text>
 
-              {/*TODO add toggle for "Open to Multiple Mentor/mentees*/}
+              {/* Toggle: Open to multiple mentees*/}
+              <FormControl isRequired display='flex' alignItems='center'>
+                <FormLabel htmlFor='multiple-mentors' mb='0'>
+                  Open to multiple mentees?
+                </FormLabel>
+                <Switch id='multiple-mentors' />
+              </FormControl>
 
-              {/*TODO add dropdown menu for gender preference of mentor*/}
+              {/* Select: gender preference of mentee*/}
+              <FormControl isRequired display='flex' alignItems='center'>
+                <FormLabel htmlFor='multiple-mentors' mb='0'>
+                  {' '}
+                  Gender preference of mentee?{' '}
+                </FormLabel>
+                <Select placeholder='Select option'>
+                  <option value='noPreference'>No preference</option>
+                  <option value='female'>Female Only </option>
+                  <option value='male'> Male Only </option>
+                </Select>
+              </FormControl>
 
               {/*TODO add type box with fuzzy logic to type in skills*/}
 

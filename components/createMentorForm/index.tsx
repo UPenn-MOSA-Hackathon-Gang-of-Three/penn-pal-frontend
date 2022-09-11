@@ -42,13 +42,16 @@ const RegistrantSchema = Yup.object().shape({
   ),
   timeZone: Yup.string().required('Field is required'),
   country: Yup.string(),
-  yearsOfExperience: Yup.number().required('Field is required'),
   companyName: Yup.string(),
   jobTitle: Yup.string(),
+  yearsOfExperience: Yup.number()
+    .required('Field is required')
+    .min(0, 'Too low')
+    .max(100, 'Too high'),
   certifications: Yup.array().of(Yup.string()),
   skills: Yup.array().of(Yup.string()),
   isOpenToMultiple: Yup.boolean().required('Field is required'),
-  genderPreference: Yup.string().required('Field is required'),
+  otherGenderPref: Yup.string().required('Field is required'),
 });
 
 const calcProgress = (
@@ -81,13 +84,13 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
         phoneNumber: '',
         timeZone: '',
         country: '',
-        yearsOfExperience: null,
         companyName: '',
         jobTitle: '',
+        yearsOfExperience: 0,
         certifications: [],
         skills: [],
         isOpenToMultiple: false,
-        genderPreference: '',
+        otherGenderPref: '',
       }}
       onSubmit={values =>
         // TODO: Handle submission processing
@@ -152,11 +155,15 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 isRequired
                 isInvalid={!!errors.gender && touched.gender}
               >
-                <Flex mt={2}>
+                <Flex
+                  mt={{ base: 0, lg: 2 }}
+                  flexDirection={{ base: 'column', lg: 'row' }}
+                >
                   <FormLabel
                     htmlFor='gender'
                     fontSize='sm'
-                    mt={2}
+                    mt={{ base: 0, lg: 2 }}
+                    mb={1}
                     sx={{ whiteSpace: 'nowrap' }}
                   >
                     Gender
@@ -169,9 +176,12 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                       placeholder='Select option'
                       fontSize='sm'
                     >
-                      <option value='male'>Male</option>
-                      <option value='female'>Female </option>
-                      <option value='other'>Other </option>
+                      <option value='woman'>Woman</option>
+                      <option value='man'>Man</option>
+                      <option value='anotherGender'>
+                        Another gender identity (e.g. non-binary, gender fluid,
+                        two-spirit)
+                      </option>
                     </Field>
                     <FormErrorMessage>{errors.gender}</FormErrorMessage>
                   </Box>
@@ -306,7 +316,7 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 </FormControl>
                 <FormControl isInvalid={!!errors.jobTitle && touched.jobTitle}>
                   <FormLabel htmlFor='jobTitle' fontSize='sm' mb={1}>
-                    Job Title
+                    Job title
                   </FormLabel>
                   <Field
                     as={Input}
@@ -319,7 +329,50 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                   <FormErrorMessage>{errors.jobTitle}</FormErrorMessage>
                 </FormControl>
               </SimpleGrid>
-
+              <FormControl
+                isRequired
+                isInvalid={
+                  !!errors.yearsOfExperience && touched.yearsOfExperience
+                }
+              >
+                <Flex mt={2}>
+                  <FormLabel
+                    htmlFor='yearsOfExperience'
+                    fontSize='sm'
+                    mt={2}
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    Years of experience
+                  </FormLabel>
+                  <Box w={{ base: 'full', lg: 'auto' }}>
+                    <Field id='yearsOfExperience' name='yearsOfExperience'>
+                      {/*  @ts-ignore */}
+                      {({ field, form }) => (
+                        <NumberInput
+                          {...field}
+                          onChange={years =>
+                            form.setFieldValue(
+                              field.name,
+                              parseInt(years) >= 0 ? parseInt(years) : 0
+                            )
+                          }
+                          min={0}
+                          max={100}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      )}
+                    </Field>
+                    <FormErrorMessage>
+                      {errors.yearsOfExperience}
+                    </FormErrorMessage>
+                  </Box>
+                </Flex>
+              </FormControl>
               {/*certification toggles*/}
               <Text fontSize='md' mb={5}>
                 {' '}
@@ -364,44 +417,72 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
                 <Switch id='crma' />
               </FormControl>
 
-              {/* Number Input: Years of Experience*/}
-              <FormControl isRequired display='flex' alignItems='center'>
-                <FormLabel htmlFor='yearsOfExperience' mb='0'>
-                  {' '}
-                  Years of Experience{' '}
-                </FormLabel>
-                <NumberInput defaultValue={15} min={0} max={50}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </FormControl>
-
-              <Text fontSize='lg' mb={5}>
-                Mentee Preferences
+              {/* MENTEE/MENTOR PREFERENCES SECTION */}
+              <Text
+                fontSize='lg'
+                fontWeight={500}
+                color='blackAlpha.600'
+                pt={8}
+              >
+                4. Mentee Preferences
               </Text>
-
-              {/* Toggle: Open to multiple mentees*/}
-              <FormControl isRequired display='flex' alignItems='center'>
-                <FormLabel htmlFor='multiple-mentors' mb='0'>
+              <FormControl
+                isRequired
+                isInvalid={
+                  !!errors.isOpenToMultiple && touched.isOpenToMultiple
+                }
+                display='flex'
+                flexDirection={{ base: 'column', lg: 'row' }}
+                alignItems={{ base: 'start', lg: 'center' }}
+              >
+                <FormLabel htmlFor='isOpenToMultiple' fontSize='sm' mt={2}>
                   Open to multiple mentees?
                 </FormLabel>
-                <Switch id='multiple-mentors' />
+                <Field
+                  as={Switch}
+                  id='isOpenToMultiple'
+                  name='isOpenToMultiple'
+                  size='lg'
+                />
               </FormControl>
-
-              {/* Select: gender preference of mentee*/}
-              <FormControl isRequired display='flex' alignItems='center'>
-                <FormLabel htmlFor='multiple-mentors' mb='0'>
-                  {' '}
-                  Gender preference of mentee?{' '}
-                </FormLabel>
-                <Select placeholder='Select option'>
-                  <option value='noPreference'>No preference</option>
-                  <option value='female'>Female Only </option>
-                  <option value='male'> Male Only </option>
-                </Select>
+              <FormControl
+                isRequired
+                isInvalid={!!errors.otherGenderPref && touched.otherGenderPref}
+              >
+                <Flex
+                  mt={{ base: 0, lg: 2 }}
+                  flexDirection={{ base: 'column', lg: 'row' }}
+                >
+                  <FormLabel
+                    htmlFor='otherGenderPref'
+                    fontSize='sm'
+                    mt={{ base: 0, lg: 2 }}
+                    mb={1}
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    Gender preference of mentee?
+                  </FormLabel>
+                  <Box w='full'>
+                    <Field
+                      as={Select}
+                      id='otherGenderPref'
+                      name='otherGenderPref'
+                      placeholder='Select option'
+                      fontSize='sm'
+                    >
+                      <option value='any'>No preference</option>
+                      <option value='woman'>Woman</option>
+                      <option value='man'>Man</option>
+                      <option value='anotherGender'>
+                        Another gender identity (e.g. non-binary, gender fluid,
+                        two-spirit)
+                      </option>
+                    </Field>
+                    <FormErrorMessage>
+                      {errors.otherGenderPref}
+                    </FormErrorMessage>
+                  </Box>
+                </Flex>
               </FormControl>
 
               {/*TODO add type box with fuzzy logic to type in skills*/}

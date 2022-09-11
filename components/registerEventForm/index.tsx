@@ -32,7 +32,10 @@ import type { FormikValues, FormikErrors } from 'formik';
 import type { Certification, Skill } from 'types';
 
 const countriesOptions = countries.map(c => c.name);
-const timeZoneOptions = timeZonesNames.map(name => name.replace('_', ' '));
+const timeZoneOptions = timeZonesNames.map(name => ({
+  label: name.replace('_', ' '),
+  value: name,
+}));
 
 const RegistrantSchema = Yup.object().shape({
   firstName: Yup.string().required('Please fill out field'),
@@ -52,10 +55,22 @@ const RegistrantSchema = Yup.object().shape({
     .required('Please fill out field')
     .min(0, 'Too low')
     .max(100, 'Too high'),
-  certifications: Yup.array().of(Yup.string()),
-  skills: Yup.array().of(Yup.string()),
+  certifications: Yup.array().of(
+    Yup.object().shape({
+      label: Yup.string(),
+      value: Yup.string(),
+      isNew: Yup.boolean(),
+    })
+  ),
+  skills: Yup.array().of(
+    Yup.object().shape({
+      label: Yup.string(),
+      value: Yup.string(),
+      isNew: Yup.boolean(),
+    })
+  ),
   isOpenToMultiple: Yup.boolean().required('Please fill out field'),
-  otherGenderPref: Yup.string().required('Please fill out field'),
+  otherGenderPreference: Yup.string().required('Please fill out field'),
 });
 
 const calcProgress = (
@@ -71,7 +86,7 @@ const calcProgress = (
 };
 
 type Props = {
-  participantType: 'mentor' | 'mentee';
+  participantType: 'Mentor' | 'Mentee';
   certifications: Certification[];
   skills: Skill[];
   onAddCertification: Function;
@@ -104,7 +119,7 @@ const RegisterEventForm = ({
         certifications: [],
         skills: [],
         isOpenToMultiple: false,
-        otherGenderPref: '',
+        otherGenderPreference: '',
       }}
       onSubmit={values =>
         // TODO: Handle submission processing
@@ -206,7 +221,7 @@ const RegisterEventForm = ({
                 fontSize='lg'
                 fontWeight={500}
                 color='blackAlpha.600'
-                pt={8}
+                pt={{ base: 12, lg: 8 }}
               >
                 2. Contact Information
               </Text>
@@ -288,8 +303,8 @@ const RegisterEventForm = ({
                     fontSize='sm'
                   >
                     {timeZoneOptions.map(option => (
-                      <option key={option} value={option}>
-                        {option}
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </Field>
@@ -302,7 +317,7 @@ const RegisterEventForm = ({
                 fontSize='lg'
                 fontWeight={500}
                 color='blackAlpha.600'
-                pt={8}
+                pt={{ base: 12, lg: 8 }}
               >
                 3. Experience
               </Text>
@@ -434,9 +449,9 @@ const RegisterEventForm = ({
                 fontSize='lg'
                 fontWeight={500}
                 color='blackAlpha.600'
-                pt={8}
+                pt={{ base: 12, lg: 8 }}
               >
-                4. {participantType === 'mentor' ? 'Mentee' : 'Mentor'}{' '}
+                4. {participantType === 'Mentor' ? 'Mentee' : 'Mentor'}{' '}
                 Preferences
               </Text>
               <FormControl
@@ -450,18 +465,22 @@ const RegisterEventForm = ({
               >
                 <FormLabel htmlFor='isOpenToMultiple' fontSize='sm' mt={2}>
                   Open to multiple{' '}
-                  {participantType === 'mentor' ? 'mentees' : 'mentors'}?
+                  {participantType === 'Mentor' ? 'mentees' : 'mentors'}?
                 </FormLabel>
                 <Field
                   as={Switch}
                   id='isOpenToMultiple'
                   name='isOpenToMultiple'
+                  colorScheme='palBlue'
                   size='lg'
                 />
               </FormControl>
               <FormControl
                 isRequired
-                isInvalid={!!errors.otherGenderPref && touched.otherGenderPref}
+                isInvalid={
+                  !!errors.otherGenderPreference &&
+                  touched.otherGenderPreference
+                }
                 pb={8}
               >
                 <Flex
@@ -469,20 +488,20 @@ const RegisterEventForm = ({
                   flexDirection={{ base: 'column', lg: 'row' }}
                 >
                   <FormLabel
-                    htmlFor='otherGenderPref'
+                    htmlFor='otherGenderPreference'
                     fontSize='sm'
                     mt={{ base: 0, lg: 2 }}
                     mb={1}
                     sx={{ whiteSpace: 'nowrap' }}
                   >
                     Gender preference of{' '}
-                    {participantType === 'mentor' ? 'mentee' : 'mentor'}?
+                    {participantType === 'Mentor' ? 'mentee' : 'mentor'}?
                   </FormLabel>
                   <Box w='full'>
                     <Field
                       as={Select}
-                      id='otherGenderPref'
-                      name='otherGenderPref'
+                      id='otherGenderPreference'
+                      name='otherGenderPreference'
                       placeholder='Select option'
                       fontSize='sm'
                     >
@@ -495,7 +514,7 @@ const RegisterEventForm = ({
                       </option>
                     </Field>
                     <FormErrorMessage>
-                      {errors.otherGenderPref}
+                      {errors.otherGenderPreference}
                     </FormErrorMessage>
                   </Box>
                 </Flex>

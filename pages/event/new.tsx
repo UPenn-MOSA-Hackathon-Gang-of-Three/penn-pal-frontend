@@ -20,13 +20,22 @@ const NewEvent: NextPage = () => {
   const [progress, setProgress] = useState<number>(0);
 
   const handleSubmit = (values: FormikValues) => {
-    router.push({
-      pathname: '/event/success',
-      query: {
-        eventName: values.eventName,
-        uniqueId: 12345, // TODO: Get unique ID from BE
-      },
-    });
+    // 1. Add all emails
+    // 2. Create new event
+    // 3. Success page on finish
+    // 4. Error page on failure
+
+    try {
+      router.push({
+        pathname: '/event/success',
+        query: {
+          eventName: values.eventName,
+          uniqueId: 12345, // TODO: Get unique ID from BE
+        },
+      });
+    } catch {
+      router.push('/event/error');
+    }
   };
 
   return (

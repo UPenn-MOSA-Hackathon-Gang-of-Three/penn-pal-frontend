@@ -23,29 +23,63 @@ import type { Certification, Skill } from 'types';
 import type { FormikValues } from 'formik';
 
 type Props = {
+  headers: { Authorization: string };
   certifications: Certification[];
   skills: Skill[];
 };
 
-const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
+const RegisterEvent: NextPage<Props> = ({
+  headers,
+  certifications,
+  skills,
+}) => {
   const router = useRouter();
 
   const [participantType, setParticipantType] = useState<
-    'mentor' | 'mentee' | undefined
+    'Mentor' | 'Mentee' | undefined
   >();
   const [progress, setProgress] = useState<number>(0);
 
   const handleAddCertification = console.log;
 
-  const handleSubmit = (values: FormikValues) => {
-    console.log(values);
-    router.push({
-      pathname: '/event/success',
-      query: {
-        participantName: values.firstName,
-        uniqueId: 12345, // TODO: Get unique ID from BE
-      },
-    });
+  const handleSubmit = async (values: FormikValues) => {
+    // 1. Update skills/certifications
+    // 2. Create new member
+    // 3. Send to success page
+    // 4. Otherwise, send to error page
+
+    try {
+      const memberResponse = await strapi.post(
+        '/members',
+        {
+          data: {
+            ...values,
+            name: `${values.firstName} ${values.lastName}`,
+            type: participantType,
+            isAvailable: true,
+            // TODO: Update these
+            certifications: values.certifications
+              .filter((c: any) => c.isNew)
+              .map((c: any) => c.value),
+            skills: values.skills
+              .filter((s: any) => s.isNew)
+              .map((s: any) => s.value),
+          },
+        },
+        { headers }
+      );
+      console.log(memberResponse);
+      router.push({
+        pathname: '/event/success',
+        query: {
+          participantName: values.firstName,
+          uniqueId: 12345, // TODO: Get unique ID from BE
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      router.push('/event/error');
+    }
   };
 
   return (
@@ -71,7 +105,7 @@ const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
               fontSize={{ base: 'sm', lg: 'md' }}
             >
               We need a few details before we can find you a{' '}
-              {participantType == 'mentor' ? 'mentee' : 'mentor'}
+              {participantType == 'Mentor' ? 'mentee' : 'mentor'}
             </Text>
           ) : null}
         </Container>
@@ -91,7 +125,7 @@ const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
           <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
             <Flex
               as='button'
-              onClick={() => setParticipantType('mentee')}
+              onClick={() => setParticipantType('Mentee')}
               flexDirection='column'
               justifyContent='space-between'
               alignItems='center'
@@ -133,7 +167,7 @@ const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
             </Flex>
             <Flex
               as='button'
-              onClick={() => setParticipantType('mentor')}
+              onClick={() => setParticipantType('Mentor')}
               flexDirection='column'
               justifyContent='space-between'
               alignItems='center'
@@ -195,10 +229,10 @@ const RegisterEvent: NextPage<Props> = ({ certifications, skills }) => {
 export default RegisterEvent;
 
 export const getServerSideProps = async (context: NextPageContext) => {
+  const headers = createHeaders(context);
   let certifications = [];
   let skills = [];
   try {
-    const headers = createHeaders(context);
     const {
       data: { data: certificationsResponse },
     } = await strapi.get('/certifications', {
@@ -217,5 +251,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
     // Do nothing
   }
 
-  return { props: { certifications, skills } };
+  return {
+    props: { headers, certifications, skills },
+  };
 };

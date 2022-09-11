@@ -4,8 +4,10 @@ import 'yup-phone';
 import { Formik, Form, Field } from 'formik';
 import {
   VStack,
-  FormControl,
+  Flex,
+  Box,
   Text,
+  FormControl,
   FormLabel,
   FormHelperText,
   FormErrorMessage,
@@ -104,53 +106,79 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
         return (
           <Form onSubmit={handleSubmit} noValidate>
             <VStack spacing={{ base: 8, lg: 8 }} alignItems='start'>
+              {/*  PERSONAL INFORMATION SECTION */}
               <Text fontSize='lg' fontWeight={500} color='blackAlpha.600'>
                 1. Personal Information
               </Text>
+              <SimpleGrid
+                w='full'
+                columns={{ base: 1, lg: 2 }}
+                gap={{ base: 8, lg: 4 }}
+              >
+                <FormControl
+                  isRequired
+                  isInvalid={!!errors.firstName && touched.firstName}
+                >
+                  <FormLabel htmlFor='firstName' fontSize='sm' mb={1}>
+                    First name
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='firstName'
+                    name='firstName'
+                    type='text'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={!!errors.lastName && touched.lastName}
+                >
+                  <FormLabel htmlFor='lastName' fontSize='sm' mb={1}>
+                    Last name
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='lastName'
+                    name='lastName'
+                    type='text'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+                </FormControl>
+              </SimpleGrid>
               <FormControl
                 isRequired
-                isInvalid={!!errors.firstName && touched.firstName}
+                isInvalid={!!errors.gender && touched.gender}
               >
-                <FormLabel htmlFor='firstName' fontSize='sm' mb={1}>
-                  First name
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='firstName'
-                  name='firstName'
-                  type='text'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isRequired
-                isInvalid={!!errors.lastName && touched.lastName}
-              >
-                <FormLabel htmlFor='lastName' fontSize='sm' mb={1}>
-                  Last name
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='lastName'
-                  name='lastName'
-                  type='text'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
-              </FormControl>
-              <FormControl isRequired display='flex' alignItems='center'>
-                <FormLabel htmlFor='gender' mb='0'>
-                  {' '}
-                  Gender{' '}
-                </FormLabel>
-                <Select placeholder='Select option'>
-                  <option value='male'>Male</option>
-                  <option value='female'>Female </option>
-                  <option value='other'>Other </option>
-                </Select>
+                <Flex mt={2}>
+                  <FormLabel
+                    htmlFor='gender'
+                    fontSize='sm'
+                    mt={2}
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    Gender
+                  </FormLabel>
+                  <Box w='full'>
+                    <Field
+                      as={Select}
+                      id='gender'
+                      name='gender'
+                      placeholder='Select option'
+                      fontSize='sm'
+                    >
+                      <option value='male'>Male</option>
+                      <option value='female'>Female </option>
+                      <option value='other'>Other </option>
+                    </Field>
+                    <FormErrorMessage>{errors.gender}</FormErrorMessage>
+                  </Box>
+                </Flex>
               </FormControl>
 
+              {/*  CONTACT INFORMATION SECTION */}
               <Text
                 fontSize='lg'
                 fontWeight={500}
@@ -159,84 +187,94 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
               >
                 2. Contact Information
               </Text>
-              <FormControl
-                isRequired
-                isInvalid={!!errors.email && touched.email}
+              <SimpleGrid
+                w='full'
+                columns={{ base: 1, lg: 2 }}
+                gap={{ base: 8, lg: 4 }}
               >
-                <FormLabel htmlFor='email' fontSize='sm' mb={1}>
-                  Email
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='email'
-                  name='email'
-                  type='text'
-                  placeholder='human@email.com'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.email}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl
-                isInvalid={!!errors.phoneNumber && touched.phoneNumber}
-              >
-                <FormLabel htmlFor='phoneNumber' fontSize='sm' mb={1}>
-                  Phone number
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='phoneNumber'
-                  name='phoneNumber'
-                  type='tel'
-                  placeholder='(123) 456-7890'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.country && touched.country}>
-                <FormLabel htmlFor='country' fontSize='sm' mb={1}>
-                  Country
-                </FormLabel>
-                <Field
-                  as={Select}
-                  id='country'
-                  name='country'
-                  placeholder='Where are you?'
-                  fontSize='sm'
+                <FormControl
+                  isRequired
+                  isInvalid={!!errors.email && touched.email}
                 >
-                  {countriesOptions.map(option => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </Field>
-                <FormErrorMessage>{errors.country}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl
-                isRequired
-                isInvalid={!!errors.timeZone && touched.timeZone}
-              >
-                <FormLabel htmlFor='timeZone' fontSize='sm' mb={1}>
-                  Time zone
-                </FormLabel>
-                <Field
-                  as={Select}
-                  id='timeZone'
-                  name='timeZone'
-                  placeholder='What time is it?'
-                  fontSize='sm'
+                  <FormLabel htmlFor='email' fontSize='sm' mb={1}>
+                    Email
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='email'
+                    name='email'
+                    type='text'
+                    placeholder='human@email.com'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={!!errors.phoneNumber && touched.phoneNumber}
                 >
-                  {timeZoneOptions.map(option => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </Field>
-                <FormErrorMessage>{errors.timeZone}</FormErrorMessage>
-              </FormControl>
+                  <FormLabel htmlFor='phoneNumber' fontSize='sm' mb={1}>
+                    Phone number
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='phoneNumber'
+                    name='phoneNumber'
+                    type='tel'
+                    placeholder='(123) 456-7890'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
+                </FormControl>
+              </SimpleGrid>
+              <SimpleGrid
+                w='full'
+                columns={{ base: 1, lg: 2 }}
+                gap={{ base: 8, lg: 4 }}
+              >
+                <FormControl isInvalid={!!errors.country && touched.country}>
+                  <FormLabel htmlFor='country' fontSize='sm' mb={1}>
+                    Country
+                  </FormLabel>
+                  <Field
+                    as={Select}
+                    id='country'
+                    name='country'
+                    placeholder='Where are you?'
+                    fontSize='sm'
+                  >
+                    {countriesOptions.map(option => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Field>
+                  <FormErrorMessage>{errors.country}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={!!errors.timeZone && touched.timeZone}
+                >
+                  <FormLabel htmlFor='timeZone' fontSize='sm' mb={1}>
+                    Time zone
+                  </FormLabel>
+                  <Field
+                    as={Select}
+                    id='timeZone'
+                    name='timeZone'
+                    placeholder='What time is it?'
+                    fontSize='sm'
+                  >
+                    {timeZoneOptions.map(option => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Field>
+                  <FormErrorMessage>{errors.timeZone}</FormErrorMessage>
+                </FormControl>
+              </SimpleGrid>
 
+              {/* EXPERIENCE SECTION */}
               <Text
                 fontSize='lg'
                 fontWeight={500}
@@ -245,37 +283,42 @@ const RegisterEventForm = ({ onProgressChange, onSubmit }: Props) => {
               >
                 3. Experience
               </Text>
-              <FormControl
-                isInvalid={!!errors.companyName && touched.companyName}
+              <SimpleGrid
+                w='full'
+                columns={{ base: 1, lg: 2 }}
+                gap={{ base: 8, lg: 4 }}
               >
-                <FormLabel htmlFor='companyName' fontSize='sm' mb={1}>
-                  Company name
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='companyName'
-                  name='companyName'
-                  type='text'
-                  placeholder='Work, Inc.'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.companyName}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.jobTitle && touched.jobTitle}>
-                <FormLabel htmlFor='jobTitle' fontSize='sm' mb={1}>
-                  Job Title
-                </FormLabel>
-                <Field
-                  as={Input}
-                  id='jobTitle'
-                  name='jobTitle'
-                  type='text'
-                  placeholder='What do you do?'
-                  fontSize='sm'
-                />
-                <FormErrorMessage>{errors.jobTitle}</FormErrorMessage>
-              </FormControl>
+                <FormControl
+                  isInvalid={!!errors.companyName && touched.companyName}
+                >
+                  <FormLabel htmlFor='companyName' fontSize='sm' mb={1}>
+                    Company name
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='companyName'
+                    name='companyName'
+                    type='text'
+                    placeholder='Work, Inc.'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.companyName}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!errors.jobTitle && touched.jobTitle}>
+                  <FormLabel htmlFor='jobTitle' fontSize='sm' mb={1}>
+                    Job Title
+                  </FormLabel>
+                  <Field
+                    as={Input}
+                    id='jobTitle'
+                    name='jobTitle'
+                    type='text'
+                    placeholder='What do you do?'
+                    fontSize='sm'
+                  />
+                  <FormErrorMessage>{errors.jobTitle}</FormErrorMessage>
+                </FormControl>
+              </SimpleGrid>
 
               {/*certification toggles*/}
               <Text fontSize='md' mb={5}>

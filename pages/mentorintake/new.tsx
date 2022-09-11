@@ -34,7 +34,7 @@ const NewEvent: NextPage = () => {
         zIndex={1}
       >
         <Container
-          maxW={{ base: '100%', lg: !participantType ? '90%' : '2xl' }}
+          maxW={{ base: '100%', lg: !participantType ? '4xl' : '2xl' }}
           mb={{ base: 7, lg: 10 }}
         >
           <Heading fontSize={{ base: 'lg', lg: '3xl' }} fontWeight='600'>
@@ -60,7 +60,7 @@ const NewEvent: NextPage = () => {
         />
       </Box>
       <Container
-        maxW={{ base: '100%', lg: !participantType ? '90%' : '2xl' }}
+        maxW={{ base: '100%', lg: !participantType ? '4xl' : '2xl' }}
         py={{ base: 12, lg: 20 }}
       >
         {!participantType ? (
@@ -91,13 +91,13 @@ const NewEvent: NextPage = () => {
               }}
               _hover={{
                 '::before': {
-                  boxShadow: '0 0 20rem 20rem #ffe4ad',
+                  boxShadow: '0 0 12rem 12rem #ffe4ad',
                   opacity: 0.7,
                 },
               }}
               _focus={{
                 '::before': {
-                  boxShadow: '0 0 20rem 20rem #ffe4ad',
+                  boxShadow: '0 0 12rem 12rem #ffe4ad',
                   opacity: 0.7,
                 },
               }}
@@ -134,13 +134,13 @@ const NewEvent: NextPage = () => {
               }}
               _hover={{
                 '::before': {
-                  boxShadow: '0 0 20rem 20rem #c1f7f7',
+                  boxShadow: '0 0 12rem 12rem #c1f7f7',
                   opacity: 0.7,
                 },
               }}
               _focus={{
                 '::before': {
-                  boxShadow: '0 0 20rem 20rem #c1f7f7',
+                  boxShadow: '0 0 12rem 12rem #c1f7f7',
                   opacity: 0.7,
                 },
               }}

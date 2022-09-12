@@ -47,9 +47,10 @@ const validateEmails = (emailsStr: string): string[] => {
 type Props = {
   onProgressChange: Function;
   onSubmit: Function;
+  isLoading: boolean;
 };
 
-const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
+const CreateEventForm = ({ onProgressChange, onSubmit, isLoading }: Props) => {
   const progressRef = useRef(0);
 
   return (
@@ -59,9 +60,14 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
         closingDate: '',
         emails: '',
       }}
-      onSubmit={values =>
-        onSubmit({ ...values, emails: validateEmails(values.emails) })
-      }
+      onSubmit={(values, { setFieldError }) => {
+        const validEmails = validateEmails(values.emails);
+        if (validEmails.length >= 2) {
+          onSubmit({ ...values, emails: validateEmails(values.emails) });
+        } else {
+          setFieldError('emails', 'You need at least 2 participants');
+        }
+      }}
       validationSchema={CreateEventSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {
@@ -140,10 +146,15 @@ const CreateEventForm = ({ onProgressChange, onSubmit }: Props) => {
                     {validEmails.length} email(s) found
                   </FormHelperText>
                 ) : null}
-                <FormErrorMessage>{errors.closingDate}</FormErrorMessage>
+                <FormErrorMessage>{errors.emails}</FormErrorMessage>
               </FormControl>
 
-              <Button type='submit' size='md'>
+              <Button
+                type='submit'
+                isLoading={isLoading}
+                loadingText='Creating'
+                size='md'
+              >
                 Create event
               </Button>
             </VStack>

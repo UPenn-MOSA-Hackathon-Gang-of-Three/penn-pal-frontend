@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
+  useToast,
   SlideFade,
   Container,
   Box,
@@ -11,30 +12,59 @@ import {
 
 import CreateEventForm from 'components/createEventForm';
 
-import type { NextPage } from 'next';
+import strapi, { createHeaders } from 'utils/request/strapi';
+
+import type { NextPage, NextPageContext } from 'next';
 import { FormikValues } from 'formik';
 
-const NewEvent: NextPage = () => {
+type Props = {
+  headers: { Authorization: string };
+};
+
+const NewEvent: NextPage<Props> = ({ headers }) => {
   const router = useRouter();
+  const toast = useToast();
 
   const [progress, setProgress] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = (values: FormikValues) => {
-    // 1. Add all emails
-    // 2. Create new event
-    // 3. Success page on finish
-    // 4. Error page on failure
-
+  const handleSubmit = async (values: FormikValues) => {
     try {
+      setIsLoading(true);
+
+      const {
+        data: {
+          data: {
+            id,
+            attributes: { uniqueID },
+          },
+        },
+      } = await strapi.post(
+        '/events',
+        {
+          data: values,
+        },
+        { headers }
+      );
+
       router.push({
         pathname: '/event/success',
         query: {
           eventName: values.eventName,
-          uniqueId: 12345, // TODO: Get unique ID from BE
+          id,
+          uniqueID,
         },
       });
-    } catch {
-      router.push('/event/error');
+    } catch (error) {
+      setIsLoading(false);
+
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again',
+        position: 'top',
+        status: 'error',
+        variant: 'subtle',
+      });
     }
   };
 
@@ -60,6 +90,7 @@ const NewEvent: NextPage = () => {
           </Text>
         </Container>
         <Progress
+          isIndeterminate={isLoading}
           value={progress}
           size='xs'
           hasStripe
@@ -71,6 +102,7 @@ const NewEvent: NextPage = () => {
         <CreateEventForm
           onProgressChange={setProgress}
           onSubmit={handleSubmit}
+          isLoading={isLoading}
         />
       </Container>
     </SlideFade>
@@ -78,3 +110,10 @@ const NewEvent: NextPage = () => {
 };
 
 export default NewEvent;
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  const headers = createHeaders(context);
+  return {
+    props: { headers },
+  };
+};

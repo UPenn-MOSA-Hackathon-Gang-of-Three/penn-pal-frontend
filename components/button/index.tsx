@@ -13,6 +13,8 @@ type Props = {
   outline?: boolean;
   icon?: ReactElement<any, string | JSXElementConstructor<any>> | undefined;
   type?: 'button' | 'submit' | 'reset' | undefined;
+  isLoading?: boolean;
+  loadingText?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   sx?: any;
 };
@@ -23,6 +25,8 @@ const Button = ({
   outline = false,
   icon,
   type = 'button',
+  isLoading,
+  loadingText,
   onClick = () => {},
   sx,
 }: Props) => (
@@ -30,6 +34,8 @@ const Button = ({
     size={size}
     leftIcon={icon}
     type={type}
+    isLoading={isLoading}
+    loadingText={loadingText}
     onClick={onClick}
     sx={sx}
     colorScheme={outline ? 'blackAlpha' : 'palBlue'}

@@ -94,6 +94,7 @@ type Props = {
   skills: Skill[];
   onProgressChange: Function;
   onSubmit: Function;
+  isLoading: boolean;
 };
 
 const RegisterEventForm = ({
@@ -102,6 +103,7 @@ const RegisterEventForm = ({
   skills,
   onProgressChange,
   onSubmit,
+  isLoading,
 }: Props) => {
   const progressRef = useRef(0);
 
@@ -123,10 +125,7 @@ const RegisterEventForm = ({
         isOpenToMultiple: false,
         otherGenderPreference: '',
       }}
-      onSubmit={values =>
-        // TODO: Handle submission processing
-        onSubmit(values)
-      }
+      onSubmit={values => onSubmit(values)}
       validationSchema={RegistrantSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {
@@ -519,7 +518,12 @@ const RegisterEventForm = ({
                 </Flex>
               </FormControl>
 
-              <Button type='submit' colorScheme='palBlue'>
+              <Button
+                type='submit'
+                isLoading={isLoading}
+                loadingText='Submitting'
+                colorScheme='palBlue'
+              >
                 Submit application
               </Button>
             </VStack>

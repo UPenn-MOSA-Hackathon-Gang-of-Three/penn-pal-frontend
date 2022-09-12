@@ -41,9 +41,12 @@ const RegisterEvent: NextPage<Props> = ({
     'mentor' | 'mentee' | undefined
   >();
   const [progress, setProgress] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (values: FormikValues) => {
     try {
+      setIsLoading(true);
+
       const {
         data: {
           data: {
@@ -58,13 +61,8 @@ const RegisterEvent: NextPage<Props> = ({
             ...values,
             type: participantType,
             isAvailable: true,
-            // TODO: Figure out how to add certifications and skills, either in separate or SAME API call
-            certifications: values.certifications
-              .filter((c: any) => c.isNew)
-              .map((c: any) => c.value),
-            skills: values.skills
-              .filter((s: any) => s.isNew)
-              .map((s: any) => s.value),
+            certifications: values.certifications.map((c: any) => c.value),
+            skills: values.skills.map((s: any) => s.value),
           },
         },
         { headers }
@@ -78,6 +76,8 @@ const RegisterEvent: NextPage<Props> = ({
         },
       });
     } catch (error) {
+      setIsLoading(false);
+
       toast({
         title: 'Something went wrong',
         description: 'Please try again',
@@ -116,6 +116,7 @@ const RegisterEvent: NextPage<Props> = ({
           ) : null}
         </Container>
         <Progress
+          isIndeterminate={isLoading}
           value={progress}
           size='xs'
           hasStripe
@@ -224,6 +225,7 @@ const RegisterEvent: NextPage<Props> = ({
             skills={skills}
             onProgressChange={setProgress}
             onSubmit={handleSubmit}
+            isLoading={isLoading}
           />
         )}
       </Container>

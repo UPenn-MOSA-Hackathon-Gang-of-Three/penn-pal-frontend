@@ -30,13 +30,15 @@ const EventSuccess: NextPage = () => {
   const router = useRouter();
   const toast = useToast();
 
-  const { eventName, participantName, uniqueId } = router.query || {};
+  const { eventName, participantName, id, uniqueID } = router.query || {};
   const isAdmin = Boolean(eventName);
-  const uniqueUrl = `/event/${isAdmin ? 'admin' : 'status'}/${uniqueId}`;
+  const uniqueLink = isAdmin
+    ? '/coming-soon'
+    : `/event/status/${id}/${uniqueID}`;
 
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(`${window.location.origin}${uniqueUrl}`)
+      .writeText(`${window.location.origin}${uniqueLink}`)
       .then(() => {
         toast({
           title: 'Link copied successfully',
@@ -52,7 +54,7 @@ const EventSuccess: NextPage = () => {
   useEffect(() => {
     if (!router.isReady) return;
 
-    if (!uniqueId) {
+    if (!id || !uniqueID) {
       router.push('/');
       return;
     }
@@ -79,7 +81,7 @@ const EventSuccess: NextPage = () => {
       });
     }
     return () => toast.close(toastId);
-  }, [router.isReady, eventName, participantName, uniqueId]);
+  }, [router.isReady, id, uniqueID, eventName, participantName]);
 
   return (
     <ScaleFade in initialScale={0.7}>
@@ -116,7 +118,7 @@ const EventSuccess: NextPage = () => {
                 ? 'In the meantime, please visit and save this unique URL to track and manage your event:'
                 : 'Or you can keep track of your match by visiting or saving this unique URL we generated for you.'}
             </Text>
-            <ButtonLink to={uniqueUrl} sx={{ mr: 3, mt: 3 }}>
+            <ButtonLink to={uniqueLink} sx={{ mr: 3, mt: 3 }}>
               {isAdmin ? 'Manage event' : 'Track match'}
             </ButtonLink>
             <Button
@@ -125,7 +127,7 @@ const EventSuccess: NextPage = () => {
               sx={{ mt: 3 }}
               onClick={copyToClipboard}
             >
-              Copy unique URL
+              Copy unique link
             </Button>
           </Box>
           <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 16 }}>

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
-  SlideFade,
+  useToast,
+  ScaleFade,
   Container,
   Box,
   SimpleGrid,
@@ -34,30 +35,30 @@ const RegisterEvent: NextPage<Props> = ({
   skills,
 }) => {
   const router = useRouter();
+  const toast = useToast();
 
   const [participantType, setParticipantType] = useState<
-    'Mentor' | 'Mentee' | undefined
+    'mentor' | 'mentee' | undefined
   >();
   const [progress, setProgress] = useState<number>(0);
 
-  const handleAddCertification = console.log;
-
   const handleSubmit = async (values: FormikValues) => {
-    // 1. Update skills/certifications
-    // 2. Create new member
-    // 3. Send to success page
-    // 4. Otherwise, send to error page
-
     try {
-      const memberResponse = await strapi.post(
+      const {
+        data: {
+          data: {
+            id,
+            attributes: { uniqueID },
+          },
+        },
+      } = await strapi.post(
         '/members',
         {
           data: {
             ...values,
-            name: `${values.firstName} ${values.lastName}`,
             type: participantType,
             isAvailable: true,
-            // TODO: Update these
+            // TODO: Figure out how to add certifications and skills, either in separate or SAME API call
             certifications: values.certifications
               .filter((c: any) => c.isNew)
               .map((c: any) => c.value),
@@ -68,22 +69,27 @@ const RegisterEvent: NextPage<Props> = ({
         },
         { headers }
       );
-      console.log(memberResponse);
       router.push({
         pathname: '/event/success',
         query: {
           participantName: values.firstName,
-          uniqueId: 12345, // TODO: Get unique ID from BE
+          id,
+          uniqueID,
         },
       });
     } catch (error) {
-      console.log(error);
-      router.push('/event/error');
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again',
+        position: 'top',
+        status: 'error',
+        variant: 'subtle',
+      });
     }
   };
 
   return (
-    <SlideFade in offsetY='100vh'>
+    <ScaleFade in initialScale={0.7}>
       <Box
         position='sticky'
         top={0}
@@ -105,7 +111,7 @@ const RegisterEvent: NextPage<Props> = ({
               fontSize={{ base: 'sm', lg: 'md' }}
             >
               We need a few details before we can find you a{' '}
-              {participantType == 'Mentor' ? 'mentee' : 'mentor'}
+              {participantType == 'mentor' ? 'mentee' : 'mentor'}
             </Text>
           ) : null}
         </Container>
@@ -125,7 +131,7 @@ const RegisterEvent: NextPage<Props> = ({
           <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
             <Flex
               as='button'
-              onClick={() => setParticipantType('Mentee')}
+              onClick={() => setParticipantType('mentee')}
               flexDirection='column'
               justifyContent='space-between'
               alignItems='center'
@@ -167,7 +173,7 @@ const RegisterEvent: NextPage<Props> = ({
             </Flex>
             <Flex
               as='button'
-              onClick={() => setParticipantType('Mentor')}
+              onClick={() => setParticipantType('mentor')}
               flexDirection='column'
               justifyContent='space-between'
               alignItems='center'
@@ -216,13 +222,12 @@ const RegisterEvent: NextPage<Props> = ({
             participantType={participantType}
             certifications={certifications}
             skills={skills}
-            onAddCertification={handleAddCertification}
             onProgressChange={setProgress}
             onSubmit={handleSubmit}
           />
         )}
       </Container>
-    </SlideFade>
+    </ScaleFade>
   );
 };
 
@@ -247,8 +252,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
     });
     skills = skillsResponse;
   } catch (error) {
-    console.log(error);
-    // Do nothing
+    console.log(error); // for tracking issues
   }
 
   return {

@@ -89,10 +89,9 @@ const calcProgress = (
 };
 
 type Props = {
-  participantType: 'Mentor' | 'Mentee';
+  participantType: 'mentor' | 'mentee';
   certifications: Certification[];
   skills: Skill[];
-  onAddCertification: Function;
   onProgressChange: Function;
   onSubmit: Function;
 };
@@ -451,7 +450,7 @@ const RegisterEventForm = ({
                 color='blackAlpha.600'
                 pt={{ base: 12, lg: 8 }}
               >
-                4. {participantType === 'Mentor' ? 'Mentee' : 'Mentor'}{' '}
+                4. {participantType === 'mentor' ? 'Mentee' : 'Mentor'}{' '}
                 Preferences
               </Text>
               <FormControl
@@ -465,7 +464,7 @@ const RegisterEventForm = ({
               >
                 <FormLabel htmlFor='isOpenToMultiple' fontSize='sm' mt={2}>
                   Open to multiple{' '}
-                  {participantType === 'Mentor' ? 'mentees' : 'mentors'}?
+                  {participantType === 'mentor' ? 'mentees' : 'mentors'}?
                 </FormLabel>
                 <Field
                   as={Switch}
@@ -495,7 +494,7 @@ const RegisterEventForm = ({
                     sx={{ whiteSpace: 'nowrap' }}
                   >
                     Gender preference of{' '}
-                    {participantType === 'Mentor' ? 'mentee' : 'mentor'}?
+                    {participantType === 'mentor' ? 'mentee' : 'mentor'}?
                   </FormLabel>
                   <Box w='full'>
                     <Field

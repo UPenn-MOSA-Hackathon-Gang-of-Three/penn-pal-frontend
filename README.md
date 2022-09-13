@@ -1,4 +1,6 @@
 
+# Penn-Pal App Frontend
+
 ### Prerequisites
 
 * [WebStorm](https://www.jetbrains.com/webstorm/) - JavaScript IDE

@@ -4,8 +4,8 @@
 ### Prerequisites
 
 * [WebStorm](https://www.jetbrains.com/webstorm/) - JavaScript IDE
-* [Node.js](https://nodejs.org/en/download/) - JavaScript Framework
-* [yarn](https://yarnpkg.com/getting-started/install) - Yarn package
+* [Node.js](https://nodejs.org/en/download/) - JavaScript Runtime outside of Browser
+* [yarn](https://yarnpkg.com/getting-started/install) - Package Manager
 
 ### Installation for Front-end 
 

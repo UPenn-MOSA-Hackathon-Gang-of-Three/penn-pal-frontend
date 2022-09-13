@@ -1,8 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+### Prerequisites
 
-First, run the development server:
+* [WebStorm](https://www.jetbrains.com/webstorm/) - JavaScript IDE
+* [Node.js](https://nodejs.org/en/download/) - JavaScript Framework
+* [yarn](https://yarnpkg.com/getting-started/install) - Yarn package
+
+### Installation for Front-end 
+
+Step 1: Download WebStorm IDE
+
+https://www.jetbrains.com/webstorm/download/#section=mac
+
+Step 2: Download Node.js (version > 16.10)
+
+https://nodejs.org/en/download/
+
+Step 3: Type in your (MacOS) Terminal, to install yarn package
+```
+sudo npm install --global yarn
+
+```
+You can check if yarn is installed.
+
+```
+yarn --version
+```
+
+### Deployment
+
+Step 1: Download the front-end code from [penn-pal-frontend](https://github.com/UPenn-MOSA-Hackathon-Gang-of-Three/penn-pal-frontend)
+
+Step 2: Load the code into WebStorm https://www.jetbrains.com/help/webstorm/opening-reopening-and-closing-projects.html
+
+Step 3: In the Terminal in WebStorm, make sure you have all the updated yarn packages.
+```
+yarn install
+```
+![Screen Shot 2022-09-12 at 4 30 18 PM](https://user-images.githubusercontent.com/70975465/189775746-aaae7521-5329-4542-b6d8-196b5c25021f.png)
+
+Step 4: To run the development server:
 
 ```bash
 npm run dev
@@ -19,6 +55,8 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
 ## Learn More
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 To learn more about Next.js, take a look at the following resources:
 

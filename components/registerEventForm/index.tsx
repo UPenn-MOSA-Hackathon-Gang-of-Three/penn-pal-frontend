@@ -33,7 +33,7 @@ import type { Certification, Skill } from 'types';
 
 const countriesOptions = countries.map(c => c.name);
 const timeZoneOptions = timeZonesNames.map(name => ({
-  label: name.replace('_', ' '),
+  label: name.replace(/_/g, ' '),
   value: name,
 }));
 

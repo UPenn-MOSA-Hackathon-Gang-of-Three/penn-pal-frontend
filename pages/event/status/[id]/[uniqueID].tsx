@@ -177,7 +177,7 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
           ) : null}
           <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
             <Text fontWeight={600}>Time Zone</Text>
-            <Text fontSize='sm'>{timeZone.replace('_', ' ')}</Text>
+            <Text fontSize='sm'>{timeZone.replace(/_/g, ' ')}</Text>
           </SimpleGrid>
           <Divider my={4} />
 

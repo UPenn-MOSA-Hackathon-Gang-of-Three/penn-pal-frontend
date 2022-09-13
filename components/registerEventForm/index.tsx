@@ -88,6 +88,17 @@ const calcProgress = (
   return Math.floor((validFields / totalFields) * 100);
 };
 
+const withoutEmptyStrings = (values: FormikValues) =>
+  Object.keys(values).reduce((acc, cur) => {
+    const isEmptyString = typeof values[cur] === 'string' && !values[cur];
+
+    if (!isEmptyString) {
+      acc[cur] = values[cur];
+    }
+
+    return acc;
+  }, {} as { [key: string]: any });
+
 type Props = {
   participantType: 'mentor' | 'mentee';
   certifications: Certification[];
@@ -125,7 +136,7 @@ const RegisterEventForm = ({
         isOpenToMultiple: false,
         otherGenderPreference: '',
       }}
-      onSubmit={values => onSubmit(values)}
+      onSubmit={values => onSubmit(withoutEmptyStrings(values))}
       validationSchema={RegistrantSchema}
     >
       {({ handleSubmit, values, errors, touched }) => {

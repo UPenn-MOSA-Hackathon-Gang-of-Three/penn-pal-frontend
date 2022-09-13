@@ -41,11 +41,11 @@ const Home: NextPage = () => {
           <Text mb={7}>
             Help professionals and students connect with others around the world
           </Text>
-          <ButtonLink to='/event/new' sx={{ mr: 3, mt: 3 }}>
-            Create an event
+          <ButtonLink to='/event/register' sx={{ mr: 3, mt: 3 }}>
+            Find a match
           </ButtonLink>
-          <ButtonLink to='/event/status' outline sx={{ mt: 3 }}>
-            View status
+          <ButtonLink to='/event/new' outline sx={{ mt: 3 }}>
+            Help others find a match
           </ButtonLink>
         </Box>
         <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 8 }}>

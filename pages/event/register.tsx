@@ -61,6 +61,7 @@ const RegisterEvent: NextPage<Props> = ({
             ...values,
             type: participantType,
             isAvailable: true,
+            emails: [values.email],
             certifications: values.certifications.map((c: any) => c.value),
             skills: values.skills.map((s: any) => s.value),
           },

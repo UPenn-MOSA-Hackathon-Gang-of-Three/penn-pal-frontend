@@ -42,24 +42,29 @@ const cardTopGradient =
 
 const colorSchemes = [
   'red',
-  'orange',
+  'linkedin',
   'yellow',
   'green',
   'teal',
   'blue',
   'cyan',
   'purple',
+  'twitter',
   'pink',
-  'linkedin',
   'facebook',
+  'orange',
   'messenger',
   'whatsapp',
-  'twitter',
   'telegram',
 ];
 
-const randomColorScheme = (): string =>
-  colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+const getCircularColorScheme = (i: number) => {
+  const circularIndex =
+    i >= 0
+      ? i % colorSchemes.length
+      : colorSchemes.length - (Math.abs(i) % colorSchemes.length);
+  return colorSchemes[circularIndex];
+};
 
 const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
   const {
@@ -195,7 +200,7 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
                   {certifications.map((c, i) => (
                     <Badge
                       key={c}
-                      colorScheme={randomColorScheme()}
+                      colorScheme={getCircularColorScheme(i)}
                       ml={i !== 0 ? 2 : 0}
                       textTransform='none'
                     >
@@ -215,7 +220,7 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
                   {skills.map((c, i) => (
                     <Badge
                       key={c}
-                      colorScheme={randomColorScheme()}
+                      colorScheme={getCircularColorScheme(-1 - i)}
                       ml={i !== 0 ? 2 : 0}
                       textTransform='none'
                     >
@@ -270,9 +275,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
         certifications: bestMatchData.certifications.data.map(
           (c: any) => c.attributes.name
         ),
-        skills: bestMatchData.certifications.data.map(
-          (s: any) => s.attributes.name
-        ),
+        skills: bestMatchData.skills.data.map((s: any) => s.attributes.name),
       };
 
       return { props: { bestMatch } };
@@ -281,7 +284,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
     console.log(error); // for tracking issues
   }
 
-  // Something went wrong at one point, so redirect to home page
+  // Something went wrong during data fetching, and the data is needed, so redirect to home page
   return {
     redirect: {
       destination: '/',

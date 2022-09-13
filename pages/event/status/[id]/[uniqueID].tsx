@@ -84,7 +84,7 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
   return (
     <ScaleFade in initialScale={0.7}>
       <Container
-        py={{ base: 7, lg: 20 }}
+        py={{ base: 12, lg: 20 }}
         maxW={{ base: '100%', lg: '2xl' }}
         minHeight='100vh'
       >

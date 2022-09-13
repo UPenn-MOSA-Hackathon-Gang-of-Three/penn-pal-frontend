@@ -90,14 +90,18 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
         </Heading>
         <Divider my={8} />
         <Box>
-          <Box height='10rem' borderTopLeftRadius='3rem' bg={cardTopGradient} />
+          <Box
+            height={{ base: '8rem', lg: '10rem' }}
+            borderTopLeftRadius='3rem'
+            bg={cardTopGradient}
+          />
           <Flex
             flexDirection={{ base: 'column', lg: 'row' }}
             textAlign={{ base: 'center', lg: 'left' }}
             alignItems={{ base: 'center', lg: 'start' }}
           >
             <Box
-              ml={7}
+              ml={{ base: 0, lg: 7 }}
               w='8rem'
               sx={{
                 bg: 'white',
@@ -168,7 +172,7 @@ const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
           ) : null}
           <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
             <Text fontWeight={600}>Time Zone</Text>
-            <Text fontSize='sm'>{timeZone}</Text>
+            <Text fontSize='sm'>{timeZone.replace('_', ' ')}</Text>
           </SimpleGrid>
           <Divider my={4} />
 

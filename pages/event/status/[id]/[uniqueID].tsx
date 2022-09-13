@@ -1,144 +1,286 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import {
-  useToast,
   ScaleFade,
   Container,
   Flex,
   Box,
+  SimpleGrid,
+  Divider,
   Heading,
   Text,
+  Badge,
 } from '@chakra-ui/react';
-import { CopyIcon } from '@chakra-ui/icons';
+import { EmailIcon, PhoneIcon } from '@chakra-ui/icons';
 import Lottie from 'lottie-react';
 
 import ButtonLink from 'components/buttonLink';
-import Button from 'components/button';
 
-import jumpingSuccess from 'assets/jumpingSuccess.json';
-import groupChat from 'assets/groupChat.json';
+import humanMorph from 'assets/humanMorph.json';
 
-import type { NextPage } from 'next';
-import type { ToastId } from '@chakra-ui/react';
+import strapi, { createHeaders } from 'utils/request/strapi';
 
-const containerStyle = {
-  fontSize: 'sm',
-  fontWeight: 300,
+import type { NextPage, NextPageContext } from 'next';
+
+type Props = {
+  bestMatch: {
+    firstName: string;
+    lastName: string;
+    gender: string;
+    email: string;
+    phoneNumber?: string;
+    timeZone: string;
+    country?: string;
+    companyName?: string;
+    jobTitle?: string;
+    yearsOfExperience: number;
+    certifications: string[];
+    skills: string[];
+  };
 };
 
-const MatchStatus: NextPage = () => {
-  const router = useRouter();
-  const { id, uniqueID } = router.query;
-  const toast = useToast();
+const cardTopGradient =
+  'linear-gradient(156deg, rgba(227,247,253,1) 0%, rgba(255,245,219,1) 35%, rgba(227,247,253,1) 85%, rgba(255,245,219,1) 100%)';
 
-  // const { eventName, participantName, uniqueID } = router.query || {};
-  // const isAdmin = Boolean(eventName);
-  // const uniqueLink = `/event/${isAdmin ? 'admin' : 'status'}/${uniqueID}`;
-  //
-  // const copyToClipboard = () => {
-  //   navigator.clipboard
-  //     .writeText(`${window.location.origin}${uniqueLink}`)
-  //     .then(() => {
-  //       toast({
-  //         title: 'Link copied successfully',
-  //         position: 'bottom',
-  //         status: 'info',
-  //         variant: 'subtle',
-  //         duration: 1000,
-  //         containerStyle,
-  //       });
-  //     });
-  // };
-  //
-  // useEffect(() => {
-  //   if (!router.isReady) return;
-  //
-  //   if (!uniqueID) {
-  //     router.push('/');
-  //     return;
-  //   }
-  //
-  //   let toastId: ToastId;
-  //
-  //   if (eventName) {
-  //     toastId = toast({
-  //       title: `"${eventName}" created`,
-  //       position: 'top',
-  //       status: 'success',
-  //       variant: 'subtle',
-  //       duration: null,
-  //       containerStyle,
-  //     });
-  //   } else if (participantName) {
-  //     toastId = toast({
-  //       title: `"${participantName}" registered`,
-  //       position: 'top',
-  //       status: 'success',
-  //       variant: 'subtle',
-  //       duration: null,
-  //       containerStyle,
-  //     });
-  //   }
-  //   return () => toast.close(toastId);
-  // }, [router.isReady, eventName, participantName, uniqueID]);
+const colorSchemes = [
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'teal',
+  'blue',
+  'cyan',
+  'purple',
+  'pink',
+  'linkedin',
+  'facebook',
+  'messenger',
+  'whatsapp',
+  'twitter',
+  'telegram',
+];
+
+const randomColorScheme = (): string =>
+  colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+
+const MatchStatus: NextPage<Props> = ({ bestMatch }) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    timeZone,
+    country,
+    companyName,
+    jobTitle,
+    yearsOfExperience,
+    certifications,
+    skills,
+  } = bestMatch;
 
   return (
-    <Text>
-      {id}, {uniqueID}
-    </Text>
+    <ScaleFade in initialScale={0.7}>
+      <Container
+        py={{ base: 7, lg: 20 }}
+        maxW={{ base: '100%', lg: '2xl' }}
+        minHeight='100vh'
+      >
+        <Heading as='p'>
+          Congrats!
+          <br />
+          Meet your new mentor:
+        </Heading>
+        <Divider my={8} />
+        <Box>
+          <Box height='10rem' borderTopLeftRadius='3rem' bg={cardTopGradient} />
+          <Flex
+            flexDirection={{ base: 'column', lg: 'row' }}
+            textAlign={{ base: 'center', lg: 'left' }}
+            alignItems={{ base: 'center', lg: 'start' }}
+          >
+            <Box
+              ml={7}
+              w='8rem'
+              sx={{
+                bg: 'white',
+                borderRadius: '50%',
+                borderWidth: 4,
+                borderStyle: 'solid',
+                borderColor: 'white',
+                boxShadow: '0 0.2rem 0.5rem 0.05rem #eee',
+                position: 'relative',
+                top: -8,
+              }}
+            >
+              <Lottie animationData={humanMorph} loop />
+            </Box>
+            <Box ml={{ base: 0, lg: 4 }} mt={{ base: 0, lg: 6 }}>
+              <Heading as='p' fontSize='2xl' fontWeight={600}>
+                Hi, my name is {firstName} {lastName}
+              </Heading>
+              {jobTitle || companyName ? (
+                <Text mt={1} color='blackAlpha.700'>
+                  {jobTitle || ''}
+                  {jobTitle && companyName ? ' at ' : null}
+                  {companyName || ''}
+                </Text>
+              ) : null}
+            </Box>
+          </Flex>
+
+          <Text color='blackAlpha.700' mt={{ base: 14, lg: 0 }} mb={6}>
+            You can contact me by:
+          </Text>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+            <Text fontWeight={600}>Email</Text>
+            <ButtonLink
+              to={`mailto:${email}`}
+              icon={<EmailIcon fontSize='xl' />}
+            >
+              {email}
+            </ButtonLink>
+          </SimpleGrid>
+          <Divider my={4} />
+          {phoneNumber ? (
+            <>
+              <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+                <Text fontWeight={600}>Phone</Text>
+                <ButtonLink
+                  to={`tel:${phoneNumber}`}
+                  icon={<PhoneIcon fontSize='xl' />}
+                >
+                  {phoneNumber}
+                </ButtonLink>
+              </SimpleGrid>
+              <Divider my={4} />
+            </>
+          ) : null}
+
+          <Text color='blackAlpha.700' mt={{ base: 14, lg: 16 }} mb={6}>
+            Where I call home:
+          </Text>
+          {country ? (
+            <>
+              <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+                <Text fontWeight={600}>Country</Text>
+                <Text fontSize='sm'>{country}</Text>
+              </SimpleGrid>
+              <Divider my={4} />
+            </>
+          ) : null}
+          <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+            <Text fontWeight={600}>Time Zone</Text>
+            <Text fontSize='sm'>{timeZone}</Text>
+          </SimpleGrid>
+          <Divider my={4} />
+
+          <Text color='blackAlpha.700' mt={{ base: 14, lg: 16 }} mb={6}>
+            A bit about me:
+          </Text>
+          <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+            <Text fontWeight={600}>Years of Experience</Text>
+            <Text fontSize='sm'>
+              {yearsOfExperience} year{yearsOfExperience !== 1 ? 's' : ''} in
+              the industry
+            </Text>
+          </SimpleGrid>
+          <Divider my={4} />
+          {certifications.length ? (
+            <>
+              <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+                <Text fontWeight={600}>Certifications</Text>
+                <Text>
+                  {certifications.map((c, i) => (
+                    <Badge
+                      key={c}
+                      colorScheme={randomColorScheme()}
+                      ml={i !== 0 ? 2 : 0}
+                      textTransform='none'
+                    >
+                      {c}
+                    </Badge>
+                  ))}
+                </Text>
+              </SimpleGrid>
+              <Divider my={4} />
+            </>
+          ) : null}
+          {skills.length ? (
+            <>
+              <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+                <Text fontWeight={600}>Skills</Text>
+                <Text>
+                  {skills.map((c, i) => (
+                    <Badge
+                      key={c}
+                      colorScheme={randomColorScheme()}
+                      ml={i !== 0 ? 2 : 0}
+                      textTransform='none'
+                    >
+                      {c}
+                    </Badge>
+                  ))}
+                </Text>
+              </SimpleGrid>
+              <Divider my={4} />
+            </>
+          ) : null}
+        </Box>
+      </Container>
+    </ScaleFade>
   );
-  // <ScaleFade in initialScale={0.7}>
-  //   <Container
-  //     py={{ base: 7, lg: 20 }}
-  //     maxW={{ base: '100%', lg: '85%' }}
-  //     display='flex'
-  //     alignItems='center'
-  //     minHeight='100vh'
-  //   >
-  //     <Flex
-  //       w='full'
-  //       flexDirection={{ base: 'column-reverse', lg: 'row' }}
-  //       justifyContent='space-between'
-  //       alignItems='center'
-  //     >
-  //       <Box
-  //         w={{ base: '100%', lg: '40%' }}
-  //         textAlign={{ base: 'center', lg: 'left' }}
-  //         mt={{ base: 7, lg: 0 }}
-  //       >
-  //         <Heading as='h1' size='2xl' mb={4}>
-  //           {isAdmin
-  //             ? 'Event created successfully'
-  //             : 'Looking for your match now!'}
-  //         </Heading>
-  //         <Text mb={3}>
-  //           {isAdmin
-  //             ? 'All participants are now being sent emails to register as a mentor or mentee.'
-  //             : 'You will receive an email from us when your match has been found.'}
-  //         </Text>
-  //         <Text mb={7}>
-  //           {isAdmin
-  //             ? 'In the meantime, please visit and save this unique URL to track and manage your event:'
-  //             : 'Or you can keep track of your match by visiting or saving this unique URL we generated for you.'}
-  //         </Text>
-  //         <ButtonLink to={uniqueLink} sx={{ mr: 3, mt: 3 }}>
-  //           {isAdmin ? 'Manage event' : 'Track match'}
-  //         </ButtonLink>
-  //         <Button
-  //           icon={<CopyIcon />}
-  //           outline
-  //           sx={{ mt: 3 }}
-  //           onClick={copyToClipboard}
-  //         >
-  //           Copy unique link
-  //         </Button>
-  //       </Box>
-  //       <Box w={{ base: '100%', lg: '60%' }} pl={{ lg: 16 }}>
-  //         <Lottie animationData={isAdmin ? jumpingSuccess : groupChat} loop />
-  //       </Box>
-  //     </Flex>
-  //   </Container>
-  // </ScaleFade>
 };
 
 export default MatchStatus;
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { id, uniqueID } = context.query;
+  const headers = createHeaders(context);
+
+  try {
+    const {
+      data: { data: matchData },
+    } = await strapi.get('/top-results', {
+      headers,
+      data: {
+        data: {
+          id,
+          uniqueID,
+        },
+      },
+    });
+
+    if (matchData?.length) {
+      const bestMatchId = matchData[0].attributes.matches[0]?.mentorID;
+      const {
+        data: {
+          data: { attributes: bestMatchData },
+        },
+      } = await strapi.get(
+        `/members/${bestMatchId}?populate[0]=emails&populate[1]=certifications&populate[2]=skills`,
+        {
+          headers,
+        }
+      );
+      const bestMatch = {
+        ...bestMatchData,
+        email: bestMatchData.emails.data[0]?.attributes.value,
+        certifications: bestMatchData.certifications.data.map(
+          (c: any) => c.attributes.name
+        ),
+        skills: bestMatchData.certifications.data.map(
+          (s: any) => s.attributes.name
+        ),
+      };
+
+      return { props: { bestMatch } };
+    }
+  } catch (error) {
+    console.log(error); // for tracking issues
+  }
+
+  // Something went wrong at one point, so redirect to home page
+  return {
+    redirect: {
+      destination: '/',
+    },
+  };
+};
